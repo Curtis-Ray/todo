@@ -7,28 +7,181 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>303</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>30</x>
-     <y>240</y>
-     <width>341</width>
-     <height>32</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
+  <layout class="QGridLayout" name="settingsGridLayout">
+   <item row="0" column="0">
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>2</number>
+     </property>
+     <widget class="QWidget" name="general">
+      <attribute name="title">
+       <string>Obecné</string>
+      </attribute>
+      <layout class="QGridLayout" name="generalGridLayout">
+       <item row="0" column="0">
+        <layout class="QFormLayout" name="generalLayout">
+         <item row="1" column="1">
+          <widget class="QCheckBox" name="trayCheckBox">
+           <property name="text">
+            <string>Schovávat do oznamovací oblasti</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QCheckBox" name="decorationCheckBox">
+           <property name="text">
+            <string>Zobrazovat dekoraci okna</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="formats">
+      <attribute name="title">
+       <string>Formáty</string>
+      </attribute>
+      <layout class="QGridLayout" name="formatsGridLayout">
+       <item row="0" column="0">
+        <layout class="QFormLayout" name="formatsLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="dateLabel">
+           <property name="text">
+            <string>Formát data:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="timeLabel">
+           <property name="text">
+            <string>Formát času:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="dateComboBox"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="QComboBox" name="timeComboBox"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="colors">
+      <attribute name="title">
+       <string>Barvy</string>
+      </attribute>
+      <layout class="QGridLayout" name="colorsGridLayout">
+       <item row="0" column="0">
+        <layout class="QFormLayout" name="colorsLayout">
+         <property name="fieldGrowthPolicy">
+          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+         </property>
+         <item row="0" column="0">
+          <widget class="QLabel" name="color1Label">
+           <property name="text">
+            <string>Barva 1:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="color2Label">
+           <property name="text">
+            <string>Barva 2:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="color3Label">
+           <property name="text">
+            <string>Barva 3:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="color4Label">
+           <property name="text">
+            <string>Barva 4:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="color5Label">
+           <property name="text">
+            <string>Barva 5:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="color6Label">
+           <property name="text">
+            <string>Barva 6:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLabel" name="color7Label">
+           <property name="text">
+            <string>Barva 7:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QLabel" name="color8Label">
+           <property name="text">
+            <string>Barva 8:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QWidget" name="color1Widget" native="true"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="QWidget" name="color2Widget" native="true"/>
+         </item>
+         <item row="2" column="1">
+          <widget class="QWidget" name="color3Widget" native="true"/>
+         </item>
+         <item row="3" column="1">
+          <widget class="QWidget" name="color4Widget" native="true"/>
+         </item>
+         <item row="4" column="1">
+          <widget class="QWidget" name="color5Widget" native="true"/>
+         </item>
+         <item row="5" column="1">
+          <widget class="QWidget" name="color6Widget" native="true"/>
+         </item>
+         <item row="6" column="1">
+          <widget class="QWidget" name="color7Widget" native="true"/>
+         </item>
+         <item row="7" column="1">
+          <widget class="QWidget" name="color8Widget" native="true"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>

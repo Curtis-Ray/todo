@@ -26,7 +26,7 @@
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
-      <widget class="QCalendarWidget" name="calendar">
+      <widget class="QCalendarWidget" name="calendarWidget">
        <property name="minimumDate">
         <date>
          <year>2000</year>
@@ -44,37 +44,37 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QWidget" name="color7" native="true"/>
+         <widget class="QWidget" name="color7Widget" native="true"/>
         </item>
         <item>
-         <widget class="QWidget" name="color6" native="true"/>
+         <widget class="QWidget" name="color6Widget" native="true"/>
         </item>
         <item>
-         <widget class="QWidget" name="color5" native="true"/>
+         <widget class="QWidget" name="color5Widget" native="true"/>
         </item>
         <item>
-         <widget class="QWidget" name="color4" native="true"/>
+         <widget class="QWidget" name="color4Widget" native="true"/>
         </item>
         <item>
-         <widget class="QWidget" name="color3" native="true"/>
+         <widget class="QWidget" name="color3Widget" native="true"/>
         </item>
         <item>
-         <widget class="QWidget" name="color2" native="true"/>
+         <widget class="QWidget" name="color2Widget" native="true"/>
         </item>
         <item>
-         <widget class="QWidget" name="color8" native="true"/>
+         <widget class="QWidget" name="color8Widget" native="true"/>
         </item>
         <item>
-         <widget class="QWidget" name="color1" native="true"/>
+         <widget class="QWidget" name="color1Widget" native="true"/>
         </item>
        </layout>
       </widget>
-      <widget class="QTextEdit" name="diary">
+      <widget class="QTextEdit" name="diaryTextEdit">
        <property name="lineWidth">
         <number>0</number>
        </property>
       </widget>
-      <widget class="QTextEdit" name="notes">
+      <widget class="QTextEdit" name="notesTextEdit">
        <property name="lineWidth">
         <number>0</number>
        </property>
