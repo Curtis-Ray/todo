@@ -75,6 +75,16 @@ class ToDo : public QMainWindow
      */
     void reload();
 
+    /**
+     * Main context menu.
+     */
+    void mainMenu(const QPoint &);
+
+    /**
+     * Open settings window.
+     */
+    void settings();
+
 };
 
 #endif // TODO_H

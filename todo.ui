@@ -27,6 +27,9 @@
        <enum>Qt::Vertical</enum>
       </property>
       <widget class="QCalendarWidget" name="calendarWidget">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
        <property name="minimumDate">
         <date>
          <year>2000</year>
@@ -70,11 +73,17 @@
        </layout>
       </widget>
       <widget class="QTextEdit" name="diaryTextEdit">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
        <property name="lineWidth">
         <number>0</number>
        </property>
       </widget>
       <widget class="QTextEdit" name="notesTextEdit">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
        <property name="lineWidth">
         <number>0</number>
        </property>

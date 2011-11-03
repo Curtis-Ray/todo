@@ -1,5 +1,6 @@
 #include "todo.h"
 #include "ui_todo.h"
+#include "ui_settings.h"
 
 ToDo::ToDo(QWidget *parent)
   : QMainWindow(parent), ui(new Ui::ToDo)
@@ -7,7 +8,14 @@ ToDo::ToDo(QWidget *parent)
   // Load UI from QT UI file.
   ui->setupUi(this);
 
-  // Connect signals and slots.
+  // Context menu after right click.
+  connect(ui->diaryTextEdit, SIGNAL(customContextMenuRequested(const QPoint &)),
+          this, SLOT(mainMenu(const QPoint &)));
+  connect(ui->notesTextEdit, SIGNAL(customContextMenuRequested(const QPoint &)),
+          this, SLOT(mainMenu(const QPoint &)));
+  connect(ui->calendarWidget, SIGNAL(customContextMenuRequested(const QPoint &)),
+          this, SLOT(mainMenu(const QPoint &)));
+  // Text edits refreshing, after changes.
   connect(ui->diaryTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
   connect(ui->notesTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
 
@@ -62,4 +70,28 @@ void ToDo::reload()
   parse(merged);
   // Display changes in textArea.
   display();
+}
+
+void ToDo::mainMenu(const QPoint &)
+{
+  QMenu* contextMenu = new QMenu(this);
+  Q_CHECK_PTR (contextMenu);
+
+  contextMenu->addAction("Settings", this, SLOT (settings()));
+  contextMenu->popup(QCursor::pos());
+  contextMenu->exec();
+  delete contextMenu;
+  contextMenu = 0;
+}
+
+void ToDo::settings()
+{
+  // Open new window ui.
+  Ui::Settings ui;
+  QDialog *dialog = new QDialog;
+
+  ui.setupUi(dialog);
+  dialog->exec();
+  delete dialog;
+  dialog = 0;
 }
