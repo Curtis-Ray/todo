@@ -44,12 +44,12 @@ class ToDo : public QMainWindow
     /**
      * Parse text to our data structures.
      */
-    void Parse(QString text);
+    void parse(QString text);
 
     /**
      * Display our data structures in textEdits and calendar.
      */
-    void Display();
+    void display();
 
     /** Data structur for notes. */
     struct note

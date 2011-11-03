@@ -15,7 +15,7 @@ ToDo::ToDo(QWidget *parent)
   loadData();
 
   // Show all informations in calendar and textedits.
-  emit(reload);
+  emit reload();
 }
 
 ToDo::~ToDo()
@@ -43,12 +43,12 @@ void ToDo::saveData()
 
 }
 
-void ToDo::Parse()
+void ToDo::parse(QString text)
 {
 
 }
 
-void ToDo::Display()
+void ToDo::display()
 {
 
 }
@@ -56,10 +56,10 @@ void ToDo::Display()
 void ToDo::reload()
 {
   // Merge both textEdits.
-  QString merged= ui->diaryTextEdit + ui->diaryTextEdit;
+  QString merged= ui->diaryTextEdit->toHtml() + ui->diaryTextEdit->toHtml();
 
   // Parse text and save it to our data structures.
-  ToDo.Parse(merged);
+  parse(merged);
   // Display changes in textArea.
-  ToDo.Display();
+  display();
 }
