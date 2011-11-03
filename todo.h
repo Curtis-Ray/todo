@@ -22,7 +22,7 @@ class ToDo : public QMainWindow
   private:
 
     /**
-     * Load configuration from file.
+     * Load configuration and last session properties from file.
      */
     void loadConfig();
 
@@ -30,6 +30,26 @@ class ToDo : public QMainWindow
      * Load data from file.
      */
     void loadData();
+
+    /**
+     * Save configuration to file.
+     */
+    void saveConfig();
+
+    /**
+     * Save data to file.
+     */
+    void saveData();
+
+    /**
+     * Parse text to our data structures.
+     */
+    void Parse(QString text);
+
+    /**
+     * Display our data structures in textEdits and calendar.
+     */
+    void Display();
 
     /** Data structur for notes. */
     struct note
