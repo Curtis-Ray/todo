@@ -27,19 +27,9 @@ class ToDo : public QMainWindow
     void loadConfig();
 
     /**
-     * Load data from file.
-     */
-    void loadData();
-
-    /**
      * Save configuration to file.
      */
     void saveConfig();
-
-    /**
-     * Save data to file.
-     */
-    void saveData();
 
     /**
      * Parse text to our data structures.
@@ -56,17 +46,18 @@ class ToDo : public QMainWindow
     {
       QDate date;
       QTime time;
-      QColor color;
+      int color;
       QString content;
     };
 
     Ui::ToDo *ui; /**< Main window. */
     QVector<struct note> data; /**< Data summary. */
     QVector<QColor> colors; /**< Colors. */
-    Qt::DateFormat dateFormat; /**< Date format. */
-    Qt::DateFormat timeFormat; /**< Time format. */
+    QString dateFormat; /**< Date format. */
+    QString timeFormat; /**< Time format. */
     bool tray; /**< Using tray. */
     bool decorations; /**< Showing decorations. */
+    QSettings settings; /**< Application settings. */
 
   private slots:
 
@@ -83,7 +74,7 @@ class ToDo : public QMainWindow
     /**
      * Open settings window.
      */
-    void settings();
+    void settingsDialog();
 
 };
 
