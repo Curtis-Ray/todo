@@ -15,4 +15,5 @@ SOURCES += main.cpp\
 
 HEADERS  += todo.h
 
-FORMS    += todo.ui
+FORMS    += todo.ui \
+    settings.ui

@@ -7,33 +7,24 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>600</height>
+    <height>456</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>ToDo</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="layout">
-    <property name="spacing">
-     <number>0</number>
-    </property>
+   <layout class="QGridLayout" name="layout">
     <property name="margin">
      <number>0</number>
     </property>
-    <item>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
      <widget class="QSplitter" name="splitter">
-      <property name="lineWidth">
-       <number>0</number>
-      </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
-      </property>
-      <property name="opaqueResize">
-       <bool>true</bool>
-      </property>
-      <property name="handleWidth">
-       <number>2</number>
       </property>
       <widget class="QCalendarWidget" name="calendar">
        <property name="minimumDate">
@@ -46,6 +37,37 @@
        <property name="firstDayOfWeek">
         <enum>Qt::Monday</enum>
        </property>
+      </widget>
+      <widget class="QWidget" name="horizontalLayoutWidget">
+       <layout class="QHBoxLayout" name="colorLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QWidget" name="color7" native="true"/>
+        </item>
+        <item>
+         <widget class="QWidget" name="color6" native="true"/>
+        </item>
+        <item>
+         <widget class="QWidget" name="color5" native="true"/>
+        </item>
+        <item>
+         <widget class="QWidget" name="color4" native="true"/>
+        </item>
+        <item>
+         <widget class="QWidget" name="color3" native="true"/>
+        </item>
+        <item>
+         <widget class="QWidget" name="color2" native="true"/>
+        </item>
+        <item>
+         <widget class="QWidget" name="color8" native="true"/>
+        </item>
+        <item>
+         <widget class="QWidget" name="color1" native="true"/>
+        </item>
+       </layout>
       </widget>
       <widget class="QTextEdit" name="diary">
        <property name="lineWidth">
