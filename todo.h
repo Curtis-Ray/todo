@@ -34,7 +34,7 @@ class ToDo : public QMainWindow
     /**
      * Parse text to our data structures.
      */
-    void parse(QString text);
+    void parse();
 
     /**
      * Display our data structures in textEdits and calendar.

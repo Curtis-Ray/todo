@@ -94,9 +94,13 @@ void ToDo::saveConfig()
   settings.endArray();
 }
 
-void ToDo::parse(QString text)
+void ToDo::parse()
 {
-  ui->notesTextEdit->setPlainText(text);
+  QString row;
+  // Create cursor for diary textEdit.
+  QTextCursor *cursor = new QTextCursor(ui->diaryTextEdit->document());
+  // Move cursor to start
+  cursor->setPosition(0);
 }
 
 void ToDo::display()
@@ -110,11 +114,8 @@ void ToDo::reload()
   disconnect(ui->notesTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
   disconnect(ui->diaryTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
 
-  // Merge both textEdits.
-  QString merged= ui->diaryTextEdit->toPlainText() + ui->notesTextEdit->toPlainText();
-
   // Parse text and save it to our data structures.
-  parse(merged);
+  parse();
   // Display changes in textArea.
   display();
 
@@ -126,7 +127,6 @@ void ToDo::reload()
 void ToDo::mainMenu(const QPoint &)
 {
   QMenu* contextMenu = new QMenu(this);
-  Q_CHECK_PTR (contextMenu);
 
   contextMenu->addAction("Settings", this, SLOT (settingsDialog()));
   contextMenu->popup(QCursor::pos());
