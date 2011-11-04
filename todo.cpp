@@ -3,7 +3,8 @@
 #include "ui_settings.h"
 
 ToDo::ToDo(QWidget *parent)
-  : QMainWindow(parent), trayIcon(new QSystemTrayIcon(this)), ui(new Ui::ToDo), contextMenu(new QMenu(this))
+  : QMainWindow(parent), trayIcon(new QSystemTrayIcon(this)), ui(new Ui::ToDo),
+    contextMenu(new QMenu(this))
 {
   // Load UI from QT UI file.
   ui->setupUi(this);
@@ -45,11 +46,14 @@ ToDo::ToDo(QWidget *parent)
 ToDo::~ToDo()
 {
   delete ui;
+  delete contextMenu;
+  delete trayIcon;
 }
 
 void ToDo::createContextMenu()
 {
   contextMenu->addAction(QString::fromUtf8("Nastavení"), this, SLOT(settingsDialog()));
+  contextMenu->addAction(QString::fromUtf8("Ukončit program"), qApp, SLOT(quit()));
 }
 
 void ToDo::iconActivated(QSystemTrayIcon::ActivationReason reason)
@@ -181,6 +185,12 @@ void ToDo::parse()
   QTextCursor *cursor = new QTextCursor(ui->diaryTextEdit->document());
   // Move cursor to start
   cursor->setPosition(0);
+  cursor->select(QTextCursor::LineUnderCursor);
+  row = cursor->selectedText();
+  ui->notesTextEdit->setPlainText(row);
+
+  delete cursor;
+  cursor = NULL;
 }
 
 void ToDo::display()

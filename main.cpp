@@ -3,11 +3,12 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    a.setApplicationName("ToDo");
+    QApplication app(argc, argv);
+    app.setOrganizationName("ToDo");
+    app.setApplicationName("ToDo");
 
-    ToDo w;
-    w.show();
+    ToDo todo;
+    todo.show();
 
-    return a.exec();
+    return app.exec();
 }
