@@ -3,10 +3,13 @@
 #include "ui_settings.h"
 
 ToDo::ToDo(QWidget *parent)
-  : QMainWindow(parent), ui(new Ui::ToDo)
+  : QMainWindow(parent), trayIcon(new QSystemTrayIcon(this)), ui(new Ui::ToDo), contextMenu(new QMenu(this))
 {
   // Load UI from QT UI file.
   ui->setupUi(this);
+
+  // Create context menu,
+  createContextMenu();
 
   // Context menu after right click.
   connect(ui->diaryTextEdit, SIGNAL(customContextMenuRequested(const QPoint &)),
@@ -15,11 +18,26 @@ ToDo::ToDo(QWidget *parent)
           this, SLOT(mainMenu(const QPoint &)));
   connect(ui->calendarWidget, SIGNAL(customContextMenuRequested(const QPoint &)),
           this, SLOT(mainMenu(const QPoint &)));
+
   // Text edits refreshing, after changes.
   connect(ui->diaryTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
   connect(ui->notesTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
 
+  // Tray icon action.
+  connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+          this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
+
+  // Load resources.
+  QResource::registerResource("/icons.qrc");
+
+  // Set tray icon properties.
+  trayIcon->setContextMenu(contextMenu);
+  trayIcon->setIcon(QIcon(":/icon"));
+  setWindowIcon(QIcon(":/icon"));
+
+   // Load configuration from file.
   loadConfig();
+
   // Show all informations in calendar and textedits.
   emit reload();
 }
@@ -29,11 +47,71 @@ ToDo::~ToDo()
   delete ui;
 }
 
+void ToDo::createContextMenu()
+{
+  contextMenu->addAction(QString::fromUtf8("Nastavení"), this, SLOT(settingsDialog()));
+}
+
+void ToDo::iconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+  switch (reason)
+  {
+    // Click or double click.
+    case QSystemTrayIcon::Trigger:
+    case QSystemTrayIcon::DoubleClick:
+    case QSystemTrayIcon::MiddleClick:
+      if(this->isVisible())
+      { // Hide open window.
+        this->hide();
+      }
+      else
+      { // Show minimized window.
+        this->show();
+      }
+      break;
+    default:
+      break;
+  }
+}
+
+void ToDo::closeEvent(QCloseEvent *event)
+{
+  if (trayIcon->isVisible())
+  { // Hide in tray.
+    hide();
+
+    event->ignore();
+  }
+  else
+  { // Save config and close.
+    saveConfig();
+
+    QMainWindow::closeEvent(event);
+  }
+}
+
+void ToDo::changeEvent(QEvent *event)
+{
+  QMainWindow::changeEvent(event);
+  if(event->type() == QEvent::WindowStateChange)
+  {
+    if(isMinimized() && trayIcon->isVisible())
+    { // Minimized window hide to tray.
+      this->hide();
+    }
+  }
+}
+
 void ToDo::loadConfig()
 {
-  // Load tray and decorations setting.
-  tray = settings.value("general/tray").value<bool>();
-  decorations = settings.value("general/decorations").value<bool>();
+  // Load window setting.
+  if (settings.value("general/tray", true).value<bool>())
+  {
+    trayIcon->show();
+  }
+  decorations = settings.value("general/decorations", false).value<bool>();
+  resize(settings.value("general/size", QSize(250, 550)).value<QSize>());
+  move(settings.value("general/position", QPoint(0, 0)).value<QPoint>());
 
   // Load format date and time.
   dateFormat = settings.value("format/date").value<QString>();
@@ -62,10 +140,12 @@ void ToDo::loadConfig()
 
 void ToDo::saveConfig()
 {
-  // Save tray and decorations setting.
+  // Save window setting.
   settings.beginGroup("general");
-  settings.setValue("tray", tray);
+  settings.setValue("tray", trayIcon->isVisible());
   settings.setValue("decorations", decorations);
+  settings.setValue("position", pos());
+  settings.setValue("size", size());
   settings.endGroup();
 
   // Save format date and time.
@@ -126,13 +206,9 @@ void ToDo::reload()
 
 void ToDo::mainMenu(const QPoint &)
 {
-  QMenu* contextMenu = new QMenu(this);
-
-  contextMenu->addAction("Settings", this, SLOT (settingsDialog()));
+  // Show menu in point.
   contextMenu->popup(QCursor::pos());
   contextMenu->exec();
-  delete contextMenu;
-  contextMenu = 0;
 }
 
 void ToDo::settingsDialog()
@@ -141,8 +217,20 @@ void ToDo::settingsDialog()
   Ui::Settings ui;
   QDialog *dialog = new QDialog;
 
+  // Show window.
   ui.setupUi(dialog);
+  ////// TODO: load settings
   dialog->exec();
+
+  if (dialog->result() == QDialog::Accepted)
+  { // Apply changes.
+
+    ////// TODO: apply changes from form
+
+    saveConfig();
+    emit reload();
+  }
+
   delete dialog;
-  dialog = 0;
+  dialog = NULL;
 }

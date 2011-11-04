@@ -22,6 +22,16 @@ class ToDo : public QMainWindow
   private:
 
     /**
+     * Hide to tray or save setting when closing.
+     */
+    void closeEvent(QCloseEvent *event);
+
+    /**
+     * Minimized window to tray.
+     */
+    void changeEvent(QEvent *event);
+
+    /**
      * Load configuration and last session properties from file.
      */
     void loadConfig();
@@ -41,6 +51,11 @@ class ToDo : public QMainWindow
      */
     void display();
 
+    /**
+     * Create context menu.
+     */
+    void createContextMenu();
+
     /** Data structur for notes. */
     struct note
     {
@@ -50,14 +65,15 @@ class ToDo : public QMainWindow
       QString content;
     };
 
+    QSystemTrayIcon *trayIcon; /**< Tray icon. */
     Ui::ToDo *ui; /**< Main window. */
     QVector<struct note> data; /**< Data summary. */
     QVector<QColor> colors; /**< Colors. */
     QString dateFormat; /**< Date format. */
     QString timeFormat; /**< Time format. */
-    bool tray; /**< Using tray. */
     bool decorations; /**< Showing decorations. */
     QSettings settings; /**< Application settings. */
+    QMenu *contextMenu; /**< Context menu. */
 
   private slots:
 
@@ -67,7 +83,7 @@ class ToDo : public QMainWindow
     void reload();
 
     /**
-     * Main context menu.
+     * Show context menu.
      */
     void mainMenu(const QPoint &);
 
@@ -76,6 +92,10 @@ class ToDo : public QMainWindow
      */
     void settingsDialog();
 
+    /**
+     * Action in tray.
+     */
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
 };
 
 #endif // TODO_H

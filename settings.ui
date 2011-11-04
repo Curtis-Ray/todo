@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>303</height>
+    <height>452</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -77,95 +77,147 @@
      </widget>
      <widget class="QWidget" name="colors">
       <attribute name="title">
-       <string>Barvy</string>
+       <string>Barvy a písmo</string>
       </attribute>
       <layout class="QGridLayout" name="colorsGridLayout">
        <item row="0" column="0">
-        <layout class="QFormLayout" name="colorsLayout">
-         <property name="fieldGrowthPolicy">
-          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Filtry</string>
          </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="color1Label">
-           <property name="text">
-            <string>Barva 1:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="color2Label">
-           <property name="text">
-            <string>Barva 2:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="color3Label">
-           <property name="text">
-            <string>Barva 3:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="color4Label">
-           <property name="text">
-            <string>Barva 4:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="color5Label">
-           <property name="text">
-            <string>Barva 5:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="color6Label">
-           <property name="text">
-            <string>Barva 6:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="color7Label">
-           <property name="text">
-            <string>Barva 7:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="color8Label">
-           <property name="text">
-            <string>Barva 8:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QWidget" name="color1Widget" native="true"/>
-         </item>
-         <item row="1" column="1">
-          <widget class="QWidget" name="color2Widget" native="true"/>
-         </item>
-         <item row="2" column="1">
-          <widget class="QWidget" name="color3Widget" native="true"/>
-         </item>
-         <item row="3" column="1">
-          <widget class="QWidget" name="color4Widget" native="true"/>
-         </item>
-         <item row="4" column="1">
-          <widget class="QWidget" name="color5Widget" native="true"/>
-         </item>
-         <item row="5" column="1">
-          <widget class="QWidget" name="color6Widget" native="true"/>
-         </item>
-         <item row="6" column="1">
-          <widget class="QWidget" name="color7Widget" native="true"/>
-         </item>
-         <item row="7" column="1">
-          <widget class="QWidget" name="color8Widget" native="true"/>
-         </item>
-        </layout>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <layout class="QFormLayout" name="colorsLayout">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+            </property>
+            <item row="1" column="0">
+             <widget class="QLabel" name="color2Label">
+              <property name="text">
+               <string>Barva 2:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QWidget" name="color2Widget" native="true"/>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="color3Label">
+              <property name="text">
+               <string>Barva 3:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QWidget" name="color3Widget" native="true"/>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="color4Label">
+              <property name="text">
+               <string>Barva 4:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QWidget" name="color4Widget" native="true"/>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="color5Label">
+              <property name="text">
+               <string>Barva 5:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QWidget" name="color5Widget" native="true"/>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="color6Label">
+              <property name="text">
+               <string>Barva 6:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QWidget" name="color6Widget" native="true"/>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="color7Label">
+              <property name="text">
+               <string>Barva 7:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QWidget" name="color7Widget" native="true"/>
+            </item>
+            <item row="7" column="0">
+             <widget class="QLabel" name="color8Label">
+              <property name="text">
+               <string>Barva 8:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1">
+             <widget class="QWidget" name="color8Widget" native="true"/>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="color1Label">
+              <property name="text">
+               <string>Barva 1:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QWidget" name="color1Widget" native="true"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Písmo</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <layout class="QFormLayout" name="formLayout">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Font:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Barva popředí:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_3">
+              <property name="text">
+               <string>Barva pozadí:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QFontComboBox" name="fontComboBox"/>
+            </item>
+            <item row="1" column="1">
+             <widget class="QWidget" name="widget" native="true"/>
+            </item>
+            <item row="2" column="1">
+             <widget class="QWidget" name="widget_2" native="true"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>
