@@ -96,7 +96,7 @@ void ToDo::saveConfig()
 
 void ToDo::parse(QString text)
 {
-
+  ui->notesTextEdit->setPlainText(text);
 }
 
 void ToDo::display()
@@ -106,13 +106,21 @@ void ToDo::display()
 
 void ToDo::reload()
 {
+  // Disable signals to avoid recursion.
+  disconnect(ui->notesTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
+  disconnect(ui->diaryTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
+
   // Merge both textEdits.
-  QString merged= ui->diaryTextEdit->toHtml() + ui->diaryTextEdit->toHtml();
+  QString merged= ui->diaryTextEdit->toPlainText() + ui->notesTextEdit->toPlainText();
 
   // Parse text and save it to our data structures.
   parse(merged);
   // Display changes in textArea.
   display();
+
+  // Reenable signals.
+  connect(ui->notesTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
+  connect(ui->diaryTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
 }
 
 void ToDo::mainMenu(const QPoint &)

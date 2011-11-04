@@ -17,3 +17,6 @@ HEADERS  += todo.h
 
 FORMS    += todo.ui \
     settings.ui
+
+RESOURCES += \
+    icons.qrc
