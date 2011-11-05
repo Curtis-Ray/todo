@@ -37,11 +37,6 @@ class ToDo : public QMainWindow
     void loadConfig();
 
     /**
-     * Save configuration to file.
-     */
-    void saveConfig();
-
-    /**
      * Parse text to our data structures.
      */
     void parse();
@@ -71,7 +66,6 @@ class ToDo : public QMainWindow
     QVector<QColor> colors; /**< Colors. */
     QString dateFormat; /**< Date format. */
     QString timeFormat; /**< Time format. */
-    bool decorations; /**< Showing decorations. */
     QSettings settings; /**< Application settings. */
     QMenu *contextMenu; /**< Context menu. */
 
@@ -81,6 +75,11 @@ class ToDo : public QMainWindow
      * Process changed data.
      */
     void reload();
+
+    /**
+     * Save configuration to file.
+     */
+    void saveConfig();
 
     /**
      * Show context menu.
