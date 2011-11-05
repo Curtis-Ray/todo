@@ -4,13 +4,48 @@
 
 ToDo::ToDo(QWidget *parent)
   : QMainWindow(parent), trayIcon(new QSystemTrayIcon(this)), ui(new Ui::ToDo),
-    contextMenu(new QMenu(this))
+    contextMenu(new QMenu(this)), colors(3), data(5)
 {
   // Load UI from QT UI file.
   ui->setupUi(this);
 
   // Create context menu,
   createContextMenu();
+
+  // Load resources.
+  QResource::registerResource("/icons.qrc");
+
+  // Set tray icon properties.
+  trayIcon->setContextMenu(contextMenu);
+  trayIcon->setIcon(QIcon(":/icon"));
+  setWindowIcon(QIcon(":/icon"));
+
+  // Load configuration from file.
+  loadConfig();
+
+  colors[0] = QColor(255,0,0);
+  colors[1] = QColor(0,255,0);
+  colors[2] = QColor(0,0,255);
+  data[0].color = 0;
+  data[0].content = "test barva c.1";
+  data[0].date = QDate(2011,9,22);
+  data[0].time = QTime(22,18);
+  data[1].color = 1;
+  data[1].content = "test barva c.2";
+  data[1].date = QDate(2011,9,25);
+  data[1].time = QTime(9,33);
+  data[2].color = 0;
+  data[2].content = "test barva c.1 verze 2";
+  data[2].date = QDate(2011,10,1);
+  data[2].time = QTime(15,45);
+  data[3].color = 0;
+  data[3].content = "test barva c.1 - poznamka bez data";
+  data[3].date = QDate();
+  data[3].time = QTime();
+  data[4].color = 2;
+  data[4].content = "test barva c.3";
+  data[4].date = QDate(2011,12,12);
+  data[4].time = QTime();
 
   // Context menu after right click.
   connect(ui->diaryTextEdit, SIGNAL(customContextMenuRequested(const QPoint &)),
@@ -27,17 +62,6 @@ ToDo::ToDo(QWidget *parent)
   // Tray icon action.
   connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
           this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
-
-  // Load resources.
-  QResource::registerResource("/icons.qrc");
-
-  // Set tray icon properties.
-  trayIcon->setContextMenu(contextMenu);
-  trayIcon->setIcon(QIcon(":/icon"));
-  setWindowIcon(QIcon(":/icon"));
-
-   // Load configuration from file.
-  loadConfig();
 
   // Show all informations in calendar and textedits.
   emit reload();
@@ -180,14 +204,32 @@ void ToDo::saveConfig()
 
 void ToDo::parse()
 {
-  QString row;
+  // Actual process row.
+  QString row("");
   // Create cursor for diary textEdit.
   QTextCursor *cursor = new QTextCursor(ui->diaryTextEdit->document());
-  // Move cursor to start
+  // Text coloring.
+  QTextCharFormat format;
+
+  // Move cursor to start.
   cursor->setPosition(0);
-  cursor->select(QTextCursor::LineUnderCursor);
-  row = cursor->selectedText();
+  while(!cursor->atEnd())
+  {
+    // Select line.
+    cursor->select(QTextCursor::LineUnderCursor);
+    format = cursor->charFormat();
+    // Save current line.
+    if(format.foreground().color() == Qt::green)
+      row += cursor->selectedText();
+    cursor->movePosition(QTextCursor::NextBlock);
+  }
+
+  // Show in second textEdit.
   ui->notesTextEdit->setPlainText(row);
+
+  //format.setForeground(QBrush(QColor(Qt::red)));
+  //cursor->setCharFormat(format);
+  //------QTextCharFormat::colorProperty()
 
   delete cursor;
   cursor = NULL;
@@ -195,7 +237,45 @@ void ToDo::parse()
 
 void ToDo::display()
 {
+  // Delete all from textEdits.
+  ui->diaryTextEdit->setPlainText("");
+  ui->notesTextEdit->setPlainText("");
 
+  // Create cursors - one for diary, one for notes.
+  QTextCursor *cursorDiary = new QTextCursor(ui->diaryTextEdit->document());
+  QTextCursor *cursorNotes = new QTextCursor(ui->notesTextEdit->document());
+  // Text coloring.
+  QTextCharFormat format;
+  // Temp variable.
+  QString temp;
+
+  // Move cursors to start.
+  cursorDiary->setPosition(0);
+  cursorNotes->setPosition(0);
+
+  foreach(struct note row, data)
+  { // Check each note, set properties, and add to textEdit.
+    if(!row.date.isNull())
+    { // It's diary.
+      // Set color of row.
+      format.setForeground(QBrush(colors[row.color]));
+      // Create row from date, time and content.
+      temp = row.date.toString("dd.MM.yyyy") + " ";
+      temp += (!row.time.isNull()) ? row.time.toString("hh:mm") + " " : " ";
+      temp += row.content + "\n";
+      // Insert it.
+      cursorDiary->insertText(temp, format);
+    }
+    else
+    { // It's note.
+      // Set color of row.
+      format.setForeground(QBrush(colors[row.color]));
+      // Create row only from content.
+      temp = row.content + "\n";
+      // Insert it.
+      cursorNotes->insertText(temp, format);
+    }
+  }
 }
 
 void ToDo::reload()
@@ -205,7 +285,7 @@ void ToDo::reload()
   disconnect(ui->diaryTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
 
   // Parse text and save it to our data structures.
-  parse();
+  //parse();
   // Display changes in textArea.
   display();
 
