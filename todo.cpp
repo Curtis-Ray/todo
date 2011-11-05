@@ -116,13 +116,24 @@ void ToDo::loadConfig()
   {
     trayIcon->show();
   }
+  else
+  {
+    trayIcon->hide();
+  }
   resize(settings.value("general/size").value<QSize>());
   move(settings.value("general/position").value<QPoint>());
   ui->splitter->restoreState(settings.value("general/splitter").value<QByteArray>());
   if (settings.value("general/frameless").value<bool>())
   {
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+    this->show();
   }
+  else
+  {
+    setWindowFlags(windowFlags() & ~Qt::FramelessWindowHint);
+    this->show();
+  }
+  setWindowOpacity(settings.value("general/opacity").value<double>());
 
   // Load format date and time.
   dateFormat = settings.value("format/date").value<QString>();
@@ -158,6 +169,7 @@ void ToDo::saveConfig()
   settings.setValue("size", size());
   settings.setValue("splitter", ui->splitter->saveState());
   settings.setValue("frameless", 0 != (windowFlags() & Qt::FramelessWindowHint));
+  settings.setValue("opacity", windowOpacity());
   settings.endGroup();
 
   // Save format date and time.
@@ -237,9 +249,12 @@ void ToDo::settingsDialog()
 
   // Show window.
   ui.setupUi(dialog);
+
   ////// TODO: load settings
-  ui.trayCheckBox->setChecked(trayIcon->isVisible());
-  ui.decorationCheckBox->setChecked(0 != (windowFlags() & Qt::FramelessWindowHint));
+
+  ui.trayCheckBox->setChecked(settings.value("general/tray").value<bool>());
+  ui.decorationCheckBox->setChecked(settings.value("general/frameless").value<bool>());
+  ui.opacitySlider->setValue(settings.value("general/opacity").value<double>() * 100);
 
   dialog->exec();
 
@@ -247,29 +262,15 @@ void ToDo::settingsDialog()
   { // Apply changes.
 
     ////// TODO: apply changes from form
-    // Set tray icon.
-    if (ui.trayCheckBox->isChecked())
-    {
-      trayIcon->show();
-    }
-    else
-    {
-      trayIcon->hide();
-    }
 
-    // Set decorations settings.
-    if (ui.decorationCheckBox->isChecked())
-    {
-      setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-      this->show();
-    }
-    else
-    {
-      setWindowFlags(windowFlags() & ~Qt::FramelessWindowHint);
-      this->show();
-    }
+    // Save changes.
+    settings.setValue("general/tray", ui.trayCheckBox->isChecked());
+    settings.setValue("general/frameless", ui.decorationCheckBox->isChecked());
+    settings.setValue("general/opacity", static_cast<double>(ui.opacitySlider->value()) / 100);
 
-    saveConfig();
+    // Apply changes.
+    loadConfig();
+
     emit reload();
   }
 
