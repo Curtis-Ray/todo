@@ -59,6 +59,9 @@ ToDo::ToDo(QWidget *parent)
   connect(ui->diaryTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
   connect(ui->notesTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
 
+  // Save config when quit.
+  connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(saveConfig()));
+
   // Tray icon action.
   connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
           this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
@@ -137,9 +140,24 @@ void ToDo::loadConfig()
   {
     trayIcon->show();
   }
-  decorations = settings.value("general/decorations", false).value<bool>();
-  resize(settings.value("general/size", QSize(250, 550)).value<QSize>());
-  move(settings.value("general/position", QPoint(0, 0)).value<QPoint>());
+  else
+  {
+    trayIcon->hide();
+  }
+  resize(settings.value("general/size").value<QSize>());
+  move(settings.value("general/position").value<QPoint>());
+  ui->splitter->restoreState(settings.value("general/splitter").value<QByteArray>());
+  if (settings.value("general/frameless").value<bool>())
+  {
+    setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
+    this->show();
+  }
+  else
+  {
+    setWindowFlags(windowFlags() & ~Qt::FramelessWindowHint);
+    this->show();
+  }
+  setWindowOpacity(settings.value("general/opacity").value<double>());
 
   // Load format date and time.
   dateFormat = settings.value("format/date").value<QString>();
@@ -171,9 +189,11 @@ void ToDo::saveConfig()
   // Save window setting.
   settings.beginGroup("general");
   settings.setValue("tray", trayIcon->isVisible());
-  settings.setValue("decorations", decorations);
   settings.setValue("position", pos());
   settings.setValue("size", size());
+  settings.setValue("splitter", ui->splitter->saveState());
+  settings.setValue("frameless", 0 != (windowFlags() & Qt::FramelessWindowHint));
+  settings.setValue("opacity", windowOpacity());
   settings.endGroup();
 
   // Save format date and time.
@@ -309,7 +329,13 @@ void ToDo::settingsDialog()
 
   // Show window.
   ui.setupUi(dialog);
+
   ////// TODO: load settings
+
+  ui.trayCheckBox->setChecked(settings.value("general/tray").value<bool>());
+  ui.decorationCheckBox->setChecked(settings.value("general/frameless").value<bool>());
+  ui.opacitySlider->setValue(settings.value("general/opacity").value<double>() * 100);
+
   dialog->exec();
 
   if (dialog->result() == QDialog::Accepted)
@@ -317,7 +343,14 @@ void ToDo::settingsDialog()
 
     ////// TODO: apply changes from form
 
-    saveConfig();
+    // Save changes.
+    settings.setValue("general/tray", ui.trayCheckBox->isChecked());
+    settings.setValue("general/frameless", ui.decorationCheckBox->isChecked());
+    settings.setValue("general/opacity", static_cast<double>(ui.opacitySlider->value()) / 100);
+
+    // Apply changes.
+    loadConfig();
+
     emit reload();
   }
 
