@@ -1,5 +1,5 @@
-include(qtsingleapplication\src\qtsingleapplication.pri)
-include(qtcolorpicker\src\qtcolorpicker.pri)
+include(qtsingleapplication\\src\\qtsingleapplication.pri)
+include(qtcolorpicker\\src\\qtcolorpicker.pri)
 
 QT += core gui
 
