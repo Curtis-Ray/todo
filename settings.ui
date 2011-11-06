@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>435</width>
-    <height>466</height>
+    <height>566</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -56,7 +56,7 @@
         </layout>
        </item>
        <item row="1" column="0">
-        <layout class="QFormLayout" name="formLayout_2">
+        <layout class="QFormLayout" name="generalLayout2">
          <item row="0" column="0">
           <widget class="QLabel" name="opacityLabel">
            <property name="text">
@@ -66,6 +66,9 @@
          </item>
          <item row="0" column="1">
           <widget class="QSlider" name="opacitySlider">
+           <property name="minimum">
+            <number>50</number>
+           </property>
            <property name="maximum">
             <number>100</number>
            </property>
@@ -132,18 +135,12 @@
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QWidget" name="color2Widget" native="true"/>
-            </item>
             <item row="2" column="0">
              <widget class="QLabel" name="color3Label">
               <property name="text">
                <string>Barva 3:</string>
               </property>
              </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QWidget" name="color3Widget" native="true"/>
             </item>
             <item row="3" column="0">
              <widget class="QLabel" name="color4Label">
@@ -152,18 +149,12 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
-             <widget class="QWidget" name="color4Widget" native="true"/>
-            </item>
             <item row="4" column="0">
              <widget class="QLabel" name="color5Label">
               <property name="text">
                <string>Barva 5:</string>
               </property>
              </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QWidget" name="color5Widget" native="true"/>
             </item>
             <item row="5" column="0">
              <widget class="QLabel" name="color6Label">
@@ -172,9 +163,6 @@
               </property>
              </widget>
             </item>
-            <item row="5" column="1">
-             <widget class="QWidget" name="color6Widget" native="true"/>
-            </item>
             <item row="6" column="0">
              <widget class="QLabel" name="color7Label">
               <property name="text">
@@ -182,18 +170,12 @@
               </property>
              </widget>
             </item>
-            <item row="6" column="1">
-             <widget class="QWidget" name="color7Widget" native="true"/>
-            </item>
             <item row="7" column="0">
              <widget class="QLabel" name="color8Label">
               <property name="text">
                <string>Barva 8:</string>
               </property>
              </widget>
-            </item>
-            <item row="7" column="1">
-             <widget class="QWidget" name="color8Widget" native="true"/>
             </item>
             <item row="0" column="0">
              <widget class="QLabel" name="color1Label">
@@ -203,7 +185,60 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QWidget" name="color1Widget" native="true"/>
+             <widget class="QtColorPicker" name="color1Button">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QtColorPicker" name="color2Button">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QtColorPicker" name="color3Button">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QtColorPicker" name="color4Button">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QtColorPicker" name="color5Button">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QtColorPicker" name="color6Button">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QtColorPicker" name="color7Button">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1">
+             <widget class="QtColorPicker" name="color8Button">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -219,21 +254,21 @@
           <item row="0" column="0">
            <layout class="QFormLayout" name="formLayout">
             <item row="0" column="0">
-             <widget class="QLabel" name="label">
+             <widget class="QLabel" name="fontLabel">
               <property name="text">
                <string>Font:</string>
               </property>
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_2">
+             <widget class="QLabel" name="foregroundLabel">
               <property name="text">
                <string>Barva popředí:</string>
               </property>
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="label_3">
+             <widget class="QLabel" name="backgroundLabel">
               <property name="text">
                <string>Barva pozadí:</string>
               </property>
@@ -243,10 +278,18 @@
              <widget class="QFontComboBox" name="fontComboBox"/>
             </item>
             <item row="1" column="1">
-             <widget class="QWidget" name="widget" native="true"/>
+             <widget class="QtColorPicker" name="foregroundButton">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QWidget" name="widget_2" native="true"/>
+             <widget class="QtColorPicker" name="backgroundButton">
+              <property name="text">
+               <string>PushButton</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -259,6 +302,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QtColorPicker</class>
+   <extends>QPushButton</extends>
+   <header location="global">qtcolorpicker.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections>
   <connection>
