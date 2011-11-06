@@ -1,14 +1,28 @@
-#include <QtGui/QApplication>
+#include <QtGui>
+#include <QtCore>
+#include <qtsingleapplication.h>
 #include "todo.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
-    app.setOrganizationName("ToDo");
-    app.setApplicationName("ToDo");
+  QtSingleApplication app(argc, argv);
+  if (app.sendMessage("Wake up!"))
+  { // Another instance running.
+    return EXIT_SUCCESS;
+  }
 
-    ToDo todo;
-    todo.show();
+  // Set names for configuration file.
+  app.setOrganizationName("ToDo");
+  app.setApplicationName("ToDo");
 
-    return app.exec();
+  // Run main window.
+  ToDo todo;
+  todo.show();
+
+  // Handle incomming message to get focus.
+  app.setActivationWindow(&todo);
+  QObject::connect(&app, SIGNAL(messageReceived(const QString&)),
+                   &todo, SLOT(handleMessage(const QString&)));
+
+  return app.exec();
 }

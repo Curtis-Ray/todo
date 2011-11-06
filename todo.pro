@@ -1,22 +1,14 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2011-11-01T18:45:45
-#
-#-------------------------------------------------
+include(qtsingleapplication\src\qtsingleapplication.pri)
 
-QT       += core gui
+QT += core gui
 
 TARGET = todo
 TEMPLATE = app
 
+SOURCES += main.cpp todo.cpp
 
-SOURCES += main.cpp\
-        todo.cpp
+HEADERS += todo.h
 
-HEADERS  += todo.h
+FORMS += todo.ui settings.ui
 
-FORMS    += todo.ui \
-    settings.ui
-
-RESOURCES += \
-    icons.qrc
+RESOURCES += icons.qrc

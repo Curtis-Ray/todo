@@ -95,6 +95,11 @@ class ToDo : public QMainWindow
      * Action in tray.
      */
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
+
+    /**
+     * Handle message from another instance and show window.
+     */
+    void handleMessage(const QString &);
 };
 
 #endif // TODO_H

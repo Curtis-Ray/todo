@@ -335,3 +335,11 @@ void ToDo::settingsDialog()
   delete dialog;
   dialog = NULL;
 }
+
+
+void ToDo::handleMessage(const QString &)
+{
+  // Get focus when message come.
+  hide();
+  show();
+}
