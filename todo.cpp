@@ -4,7 +4,7 @@
 
 ToDo::ToDo(QWidget *parent)
   : QMainWindow(parent), trayIcon(new QSystemTrayIcon(this)), ui(new Ui::ToDo),
-    contextMenu(new QMenu(this)), colors(3), data(5)
+    contextMenu(new QMenu(this))
 {
   // Load UI from QT UI file.
   ui->setupUi(this);
@@ -22,30 +22,6 @@ ToDo::ToDo(QWidget *parent)
 
   // Load configuration from file.
   loadConfig();
-
-  colors[0] = QColor(255,0,0);
-  colors[1] = QColor(0,255,0);
-  colors[2] = QColor(0,0,255);
-  data[0].color = 0;
-  data[0].content = "test barva c.1";
-  data[0].date = QDate(2011,9,22);
-  data[0].time = QTime(22,18);
-  data[1].color = 1;
-  data[1].content = "test barva c.2";
-  data[1].date = QDate(2011,9,25);
-  data[1].time = QTime(9,33);
-  data[2].color = 0;
-  data[2].content = "test barva c.1 verze 2";
-  data[2].date = QDate(2011,10,1);
-  data[2].time = QTime(15,45);
-  data[3].color = 0;
-  data[3].content = "test barva c.1 - poznamka bez data";
-  data[3].date = QDate();
-  data[3].time = QTime();
-  data[4].color = 2;
-  data[4].content = "test barva c.3";
-  data[4].date = QDate(2011,12,12);
-  data[4].time = QTime();
 
   // Context menu after right click.
   connect(ui->diaryTextEdit, SIGNAL(customContextMenuRequested(const QPoint &)),
@@ -167,18 +143,20 @@ void ToDo::loadConfig()
   for (int i = 0; i < size; ++i)
   { // Load colors vector.
     settings.setArrayIndex(i);
-    colors[i] = settings.value("color").value<QColor>();
+    colors.insert(i, settings.value("color").value<QColor>());
   }
   settings.endArray();
 
   size = settings.beginReadArray("data");
+  struct note temp;
   for (int i = 0; i < size; ++i)
   { // Load all data.
     settings.setArrayIndex(i);
-    data[i].date = settings.value("color").value<QDate>();
-    data[i].time = settings.value("color").value<QTime>();
-    data[i].color = settings.value("color").value<int>();
-    data[i].content = settings.value("color").value<QString>();
+    temp.date = settings.value("date").value<QDate>();
+    temp.time = settings.value("time").value<QTime>();
+    temp.color = settings.value("color").value<int>();
+    temp.content = settings.value("content").value<QString>();
+    data.insert(i, temp);
   }
   settings.endArray();
 
