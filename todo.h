@@ -71,9 +71,14 @@ class ToDo : public QMainWindow
     QString timeFormat; /**< Time format. */
     QSettings settings; /**< Application settings. */
     QMenu *contextMenu; /**< Context menu. */
+    QTimer *inactivity; /**< Inactivity timer. */
 
   private slots:
 
+    /**
+     * User is active - reseting inactivity timer.
+     */
+    void userActive();
     /**
      * Process changed data.
      */

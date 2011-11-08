@@ -2,7 +2,7 @@
 
 ToDo::ToDo(QWidget *parent)
   : QMainWindow(parent), trayIcon(new QSystemTrayIcon(this)), ui(new Ui::ToDo),
-    contextMenu(new QMenu(this))
+    contextMenu(new QMenu(this)), inactivity(new QTimer(this))
 {
   // Load UI from QT UI file.
   ui->setupUi(this);
@@ -29,9 +29,12 @@ ToDo::ToDo(QWidget *parent)
   connect(ui->calendarWidget, SIGNAL(customContextMenuRequested(const QPoint &)),
           this, SLOT(mainMenu(const QPoint &)));
 
-  // Text edits refreshing, after changes.
-  connect(ui->diaryTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
-  connect(ui->notesTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
+  // Text edits refreshing inactive timer.
+  connect(ui->diaryTextEdit, SIGNAL(textChanged()), this, SLOT(userActive()));
+  connect(ui->notesTextEdit, SIGNAL(textChanged()), this, SLOT(userActive()));
+
+  // Inactive timer expired.
+  connect(inactivity, SIGNAL(timeout()), this, SLOT(reload()));
 
   // Save config when quit.
   connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(saveConfig()));
@@ -41,7 +44,7 @@ ToDo::ToDo(QWidget *parent)
           this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
   // Show all informations in calendar and textedits.
-  emit reload();
+  emit display();
 }
 
 ToDo::~ToDo()
@@ -59,26 +62,74 @@ void ToDo::parse()
   QTextCursor *cursor = new QTextCursor(ui->diaryTextEdit->document());
   // Text coloring.
   QTextCharFormat format;
+  // Date regexp.
+  QRegExp rx("^(0?[1-9]|[12][0-9]|3[01]).(0?[1-9]|1[0-2]).(\\d{4})\\s+(.*)");
+  // Time regexp.
+  QRegExp rx2("^(0?[0-9]|1[0-9]|2[0-4]):([0-5][0-9])\\s+(.*)");
+  // Temporary variables.
+  struct note tempNote;
+  QColor tempColor;
+  int counter = 0;
 
-  // Move cursor to start.
-  cursor->setPosition(0);
-  while(!cursor->atEnd())
-  {
-    // Select line.
-    cursor->select(QTextCursor::LineUnderCursor);
-    format = cursor->charFormat();
-    // Save current line.
-    if(format.foreground().color() == Qt::green)
-      row += cursor->selectedText();
-    cursor->movePosition(QTextCursor::NextBlock);
+  // Clear whole data structure.
+  data.clear();
+
+  for(int i = 0; i < 2; i++)
+  { // Two textEdits to parse.
+    // Move cursor to start.
+    cursor->setPosition(0);
+
+    while(!cursor->atEnd())
+    { // Parsing loop.
+      // Select line.
+      cursor->select(QTextCursor::LineUnderCursor);
+      row = cursor->selectedText();
+
+      // Which color is line.
+      format = cursor->charFormat();
+      tempColor = format.foreground().color();
+      for(int j = 0; j < colors.size(); j++)
+      { // Which color is it?
+        if(tempColor == colors[j])
+          tempNote.color = j;
+      }
+
+      // Date and time on line.
+      if(rx.indexIn(row) == -1)
+      { // No date - it is note.
+        tempNote.date = QDate();
+        tempNote.time = QTime();
+        tempNote.content = row;
+      }
+      else
+      { // It has date - it is diary record.
+        tempNote.date = QDate(rx.cap(3).toInt(),
+                              rx.cap(2).toInt(),
+                              rx.cap(1).toInt());
+        // Time on line.
+        if(rx2.indexIn(rx.cap(4)) == -1)
+        { // No time.
+          tempNote.time = QTime();
+          tempNote.content = rx.cap(4);
+        }
+        else
+        { // It has time.
+          tempNote.time = QTime(rx2.cap(1).toInt(), rx2.cap(2).toInt());
+          tempNote.content = rx2.cap(3);
+        }
+      }
+
+      // Save temp to data structure.
+      data.insert(counter++, tempNote);
+
+      // Move cursor to next line.
+      cursor->movePosition(QTextCursor::NextBlock);
+    }
+
+
+    // Move cursor to second textEdit.
+    *cursor = QTextCursor(ui->notesTextEdit->document());
   }
-
-  // Show in second textEdit.
-  ui->notesTextEdit->setPlainText(row);
-
-  //format.setForeground(QBrush(QColor(Qt::red)));
-  //cursor->setCharFormat(format);
-  //------QTextCharFormat::colorProperty()
 
   delete cursor;
   cursor = NULL;
@@ -127,20 +178,20 @@ void ToDo::display()
   }
 }
 
+void ToDo::userActive()
+{
+  // Wait 5s for another key press.
+  inactivity->start(5000);
+}
+
 void ToDo::reload()
 {
-  // Disable signals to avoid recursion.
-  disconnect(ui->notesTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
-  disconnect(ui->diaryTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
-
   // Parse text and save it to our data structures.
-  //parse();
+  parse();
   // Display changes in textArea.
   display();
 
-  // Reenable signals.
-  connect(ui->notesTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
-  connect(ui->diaryTextEdit, SIGNAL(textChanged()), this, SLOT(reload()));
+  inactivity->stop();
 }
 
 void ToDo::handleMessage(const QString &)
