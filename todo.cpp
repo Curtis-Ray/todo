@@ -99,7 +99,7 @@ void ToDo::parse()
       { // No date - it is note.
         tempNote.date = QDate();
         tempNote.time = QTime();
-        tempNote.content = row;
+        tempNote.content = row.trimmed();
       }
       else
       { // It has date - it is diary record.
@@ -110,12 +110,12 @@ void ToDo::parse()
         if(rx2.indexIn(rx.cap(4)) == -1)
         { // No time.
           tempNote.time = QTime();
-          tempNote.content = rx.cap(4);
+          tempNote.content = rx.cap(4).trimmed();
         }
         else
         { // It has time.
           tempNote.time = QTime(rx2.cap(1).toInt(), rx2.cap(2).toInt());
-          tempNote.content = rx2.cap(3);
+          tempNote.content = rx2.cap(3).trimmed();
         }
       }
 
