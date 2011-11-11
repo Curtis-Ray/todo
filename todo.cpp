@@ -54,6 +54,22 @@ ToDo::~ToDo()
   delete trayIcon;
 }
 
+bool ToDo::dataLessThan(const struct note &d1, const struct note &d2)
+{
+  if (d1.date.isNull() || d2.date.isNull())
+  { // Dont care about notes without date.
+    return false;
+  }
+
+  if (d1.date == d2.date)
+  { // On same dates, we sort according times.
+    return (d1.time < d2.time);
+  }
+
+  // Compare dates.
+  return (d1.date < d2.date);
+}
+
 void ToDo::parse()
 {
   // Actual process row.
@@ -130,6 +146,9 @@ void ToDo::parse()
     // Move cursor to second textEdit.
     *cursor = QTextCursor(ui->notesTextEdit->document());
   }
+
+  // Sort data.
+  qStableSort(data.begin(), data.end(), ToDo::dataLessThan);
 
   delete cursor;
   cursor = NULL;

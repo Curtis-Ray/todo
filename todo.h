@@ -39,6 +39,20 @@ class ToDo : public QMainWindow
      */
     void loadConfig();
 
+    /** Data structur for notes. */
+    struct note
+    {
+      QDate date;
+      QTime time;
+      int color;
+      QString content;
+    };
+
+    /**
+     * Compare data structures for sorting.
+     */
+    static bool dataLessThan(const struct note &d1, const struct note &d2);
+
     /**
      * Parse text to our data structures.
      */
@@ -53,15 +67,6 @@ class ToDo : public QMainWindow
      * Create context menu.
      */
     void createContextMenu();
-
-    /** Data structur for notes. */
-    struct note
-    {
-      QDate date;
-      QTime time;
-      int color;
-      QString content;
-    };
 
     QSystemTrayIcon *trayIcon; /**< Tray icon. */
     Ui::ToDo *ui; /**< Main window. */
