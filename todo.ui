@@ -79,6 +79,9 @@
        <property name="lineWidth">
         <number>0</number>
        </property>
+       <property name="tabChangesFocus">
+        <bool>true</bool>
+       </property>
       </widget>
       <widget class="QTextEdit" name="notesTextEdit">
        <property name="contextMenuPolicy">
@@ -86,6 +89,9 @@
        </property>
        <property name="lineWidth">
         <number>0</number>
+       </property>
+       <property name="tabChangesFocus">
+        <bool>true</bool>
        </property>
       </widget>
      </widget>
