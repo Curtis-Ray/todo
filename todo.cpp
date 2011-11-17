@@ -98,7 +98,7 @@ void ToDo::parse()
     while(!cursor->atEnd())
     { // Parsing loop.
       // Select line.
-      cursor->select(QTextCursor::LineUnderCursor);
+      cursor->select(QTextCursor::BlockUnderCursor);
       row = cursor->selectedText();
 
       // Which color is line.
