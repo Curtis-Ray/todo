@@ -6,6 +6,7 @@
 #include <qtcolorpicker.h>
 #include "ui_todo.h"
 #include "ui_settings.h"
+#include "colorwidget.h"
 
 namespace Ui
 {

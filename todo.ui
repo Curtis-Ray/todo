@@ -42,33 +42,93 @@
        </property>
       </widget>
       <widget class="QWidget" name="horizontalLayoutWidget">
-       <layout class="QHBoxLayout" name="colorLayout">
+       <layout class="QHBoxLayout" name="horizontalLayout">
         <property name="spacing">
          <number>0</number>
         </property>
+        <property name="sizeConstraint">
+         <enum>QLayout::SetDefaultConstraint</enum>
+        </property>
         <item>
-         <widget class="QWidget" name="color7Widget" native="true"/>
+         <widget class="ColorWidget" name="color1Widget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QWidget" name="color6Widget" native="true"/>
+         <widget class="ColorWidget" name="color2Widget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QWidget" name="color5Widget" native="true"/>
+         <widget class="ColorWidget" name="color3Widget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QWidget" name="color4Widget" native="true"/>
+         <widget class="ColorWidget" name="color4Widget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QWidget" name="color3Widget" native="true"/>
+         <widget class="ColorWidget" name="color5Widget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QWidget" name="color2Widget" native="true"/>
+         <widget class="ColorWidget" name="color6Widget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <zorder>color2Widget</zorder>
+         </widget>
         </item>
         <item>
-         <widget class="QWidget" name="color8Widget" native="true"/>
+         <widget class="ColorWidget" name="color7Widget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item>
-         <widget class="QWidget" name="color1Widget" native="true"/>
+         <widget class="ColorWidget" name="color8Widget" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -100,6 +160,14 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ColorWidget</class>
+   <extends>QWidget</extends>
+   <header>colorwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

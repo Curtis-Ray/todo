@@ -322,12 +322,21 @@ void ToDo::loadConfig()
   timeFormat = settings.value("format/time").value<QString>();
 
   int size = settings.beginReadArray("colors");
+  size = 8; // Ugly magic constant.
   colors.clear();
   for (int i = 0; i < size; ++i)
   { // Load colors vector.
     settings.setArrayIndex(i);
-    colors.insert(i, settings.value("color").value<QColor>());
+    colors.insert(i, settings.value("color", QColor(Qt::black)).value<QColor>());
   }
+  ui->color1Widget->setColor(colors[0]);
+  ui->color2Widget->setColor(colors[1]);
+  ui->color3Widget->setColor(colors[2]);
+  ui->color4Widget->setColor(colors[3]);
+  ui->color5Widget->setColor(colors[4]);
+  ui->color6Widget->setColor(colors[5]);
+  ui->color7Widget->setColor(colors[6]);
+  ui->color8Widget->setColor(colors[7]);
   settings.endArray();
 
   size = settings.beginReadArray("data");
