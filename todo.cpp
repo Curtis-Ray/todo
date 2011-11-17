@@ -518,8 +518,12 @@ void ToDo::settingsDialog()
   ui.foregroundButton->setStandardColors();
   ui.backgroundButton->setCurrentColor(settings.value("general/background").value<QColor>());
   ui.backgroundButton->setStandardColors();
+
   ui.fontComboBox->setCurrentFont(settings.value("general/font").value<QFont>());
   ui.fontSpinBox->setValue(settings.value("general/font").value<QFont>().pointSize());
+
+  ui.timeComboBox->addItem("HH:MM");
+  ui.dateComboBox->addItem("DD.MM.YYYY");
 
   dialog->exec();
 
