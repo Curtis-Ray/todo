@@ -36,6 +36,16 @@ ToDo::ToDo(QWidget *parent)
   // Inactive timer expired.
   connect(inactivity, SIGNAL(timeout()), this, SLOT(reload()));
 
+  // Filters.
+  connect(ui->color1Widget, SIGNAL(stateChanged()), this, SLOT(filtersChanged()));
+  connect(ui->color2Widget, SIGNAL(stateChanged()), this, SLOT(filtersChanged()));
+  connect(ui->color3Widget, SIGNAL(stateChanged()), this, SLOT(filtersChanged()));
+  connect(ui->color4Widget, SIGNAL(stateChanged()), this, SLOT(filtersChanged()));
+  connect(ui->color5Widget, SIGNAL(stateChanged()), this, SLOT(filtersChanged()));
+  connect(ui->color6Widget, SIGNAL(stateChanged()), this, SLOT(filtersChanged()));
+  connect(ui->color7Widget, SIGNAL(stateChanged()), this, SLOT(filtersChanged()));
+  connect(ui->color8Widget, SIGNAL(stateChanged()), this, SLOT(filtersChanged()));
+
   // Save config when quit.
   connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(saveConfig()));
 
@@ -283,6 +293,20 @@ void ToDo::changeEvent(QEvent *event)
   }
 }
 
+void ToDo::filtersChanged()
+{
+  filters[0] = ui->color1Widget->getState();
+  filters[1] = ui->color2Widget->getState();
+  filters[2] = ui->color3Widget->getState();
+  filters[3] = ui->color4Widget->getState();
+  filters[4] = ui->color5Widget->getState();
+  filters[5] = ui->color6Widget->getState();
+  filters[6] = ui->color7Widget->getState();
+  filters[7] = ui->color8Widget->getState();
+
+  display();
+}
+
 void ToDo::loadConfig()
 {
   // Load window setting.
@@ -321,7 +345,25 @@ void ToDo::loadConfig()
   dateFormat = settings.value("format/date").value<QString>();
   timeFormat = settings.value("format/time").value<QString>();
 
-  int size = settings.beginReadArray("colors");
+  settings.beginReadArray("filters");
+  int size = 8; // Ugly magic constant.
+  filters.clear();
+  for (int i = 0; i < size; ++i)
+  { // Load filters vector.
+    settings.setArrayIndex(i);
+    filters.insert(i, settings.value("filter", true).value<bool>());
+  }
+  ui->color1Widget->setState(filters[0]);
+  ui->color2Widget->setState(filters[1]);
+  ui->color3Widget->setState(filters[2]);
+  ui->color4Widget->setState(filters[3]);
+  ui->color5Widget->setState(filters[4]);
+  ui->color6Widget->setState(filters[5]);
+  ui->color7Widget->setState(filters[6]);
+  ui->color8Widget->setState(filters[7]);
+  settings.endArray();
+
+  settings.beginReadArray("colors");
   size = 8; // Ugly magic constant.
   colors.clear();
   for (int i = 0; i < size; ++i)
@@ -374,6 +416,14 @@ void ToDo::saveConfig()
   settings.setValue("date", dateFormat);
   settings.setValue("time", timeFormat);
   settings.endGroup();
+
+  settings.beginWriteArray("filters");
+  for (int i = 0; i < filters.size(); ++i)
+  { // Save filters vector.
+    settings.setArrayIndex(i);
+    settings.setValue("filter", filters.at(i));
+  }
+  settings.endArray();
 
   settings.beginWriteArray("colors");
   for (int i = 0; i < colors.size(); ++i)
