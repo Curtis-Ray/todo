@@ -251,11 +251,19 @@ void ToDo::display()
   QTextCursor *cursorNotes = new QTextCursor(ui->notesTextEdit->document());
   // Text coloring.
   QTextCharFormat format;
+  // Calendar bolding.
+  QTextCharFormat format2;
   // Temp variable.
   QString temp;
   struct note tempRow;
   bool firstDiary = true;
   bool firstNote = true;
+
+  // Clear top calendar and highlight today.
+  ui->calendarWidget->setDateTextFormat(QDate(), format2);
+  format2.setBackground(QBrush(QColor(Qt::black)));
+  format2.setForeground(QBrush(QColor(Qt::white)));
+  ui->calendarWidget->setDateTextFormat(QDate(QDate::currentDate()), format2);
 
   // Move cursors to start.
   cursorDiary->setPosition(0);
@@ -276,6 +284,10 @@ void ToDo::display()
     { // Show only filtered events (filtered by color).
       if(!tempRow.date.isNull())
       { // It's diary.
+        // Bold date in top calendar.
+        format2.setBackground(QBrush(QColor(Qt::red)));
+        format2.setForeground(QBrush(QColor(Qt::white)));
+        ui->calendarWidget->setDateTextFormat(tempRow.date, format2);
         // Set color of row.
         format.setForeground(QBrush(colors[tempRow.color]));
         // Create row from date, time and content.
