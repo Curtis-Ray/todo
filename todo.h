@@ -84,6 +84,7 @@ class ToDo : public QMainWindow
     QMenu *contextMenu; /**< Context menu. */
     QTimer *inactivity; /**< Inactivity timer. */
     QVector<bool> filters; /**< Color filters. */
+    QVector<struct note> unfiltered; /**< Unfiltered data (backup). */
 
   private slots:
 

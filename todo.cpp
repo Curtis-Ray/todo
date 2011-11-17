@@ -126,11 +126,6 @@ bool ToDo::event(QEvent *event)
 
 bool ToDo::dataLessThan(const struct note &d1, const struct note &d2)
 {
-  if (d1.date.isNull() || d2.date.isNull())
-  { // Dont care about notes without date.
-    return false;
-  }
-
   if (d1.date == d2.date)
   { // On same dates, we sort according times.
     return (d1.time < d2.time);
@@ -241,9 +236,6 @@ void ToDo::parse()
     *cursor = QTextCursor(ui->notesTextEdit->document());
   }
 
-  // Sort data.
-  qStableSort(data.begin(), data.end(), ToDo::dataLessThan);
-
   delete cursor;
   cursor = NULL;
 }
@@ -261,6 +253,7 @@ void ToDo::display()
   QTextCharFormat format;
   // Temp variable.
   QString temp;
+  struct note tempRow;
   bool firstDiary = true;
   bool firstNote = true;
 
@@ -268,37 +261,53 @@ void ToDo::display()
   cursorDiary->setPosition(0);
   cursorNotes->setPosition(0);
 
-  foreach(struct note row, data)
+  // Merge parsed and unfiltered (hidden) data.
+  data += unfiltered;
+  unfiltered.clear();
+
+  // Sort data.
+  qStableSort(data.begin(), data.end(), ToDo::dataLessThan);
+
+  QVectorIterator<struct note> i(data);
+  while (i.hasNext())
   { // Check each note, set properties, and add to textEdit.
-    if(!row.date.isNull())
-    { // It's diary.
-      // Set color of row.
-      format.setForeground(QBrush(colors[row.color]));
-      // Create row from date, time and content.
-      temp = row.date.toString("dd.MM.yyyy") + " ";
-      temp += (!row.time.isNull()) ? row.time.toString("hh:mm") + " " : "";
-      temp += row.content;
-      // Insert it.
-      if(!firstDiary)
-      {// Not a first line.
-        cursorDiary->insertBlock();
+    tempRow = i.next();
+    if(filters[tempRow.color])
+    { // Show only filtered events (filtered by color).
+      if(!tempRow.date.isNull())
+      { // It's diary.
+        // Set color of row.
+        format.setForeground(QBrush(colors[tempRow.color]));
+        // Create row from date, time and content.
+        temp = tempRow.date.toString("dd.MM.yyyy") + " ";
+        temp += (!tempRow.time.isNull()) ? tempRow.time.toString("hh:mm") + " " : "";
+        temp += tempRow.content;
+        // Insert it.
+        if(!firstDiary)
+        {// Not a first line.
+          cursorDiary->insertBlock();
+        }
+        else { firstDiary = false; }
+        cursorDiary->insertText(temp, format);
       }
-      else { firstDiary = false; }
-      cursorDiary->insertText(temp, format);
+      else
+      { // It's note.
+        // Set color of row.
+        format.setForeground(QBrush(colors[tempRow.color]));
+        // Create row only from content.
+        temp = tempRow.content;
+        // Insert it.
+        if(!firstNote)
+        {// Not a first line.
+          cursorNotes->insertBlock();
+        }
+        else { firstNote = false; }
+        cursorNotes->insertText(temp, format);
+      }
     }
     else
-    { // It's note.
-      // Set color of row.
-      format.setForeground(QBrush(colors[row.color]));
-      // Create row only from content.
-      temp = row.content;
-      // Insert it.
-      if(!firstNote)
-      {// Not a first line.
-        cursorNotes->insertBlock();
-      }
-      else { firstNote = false; }
-      cursorNotes->insertText(temp, format);
+    { // Backup unfiltered data for later display and parse.
+      unfiltered.append(tempRow);
     }
   }
 }
@@ -400,7 +409,7 @@ void ToDo::filtersChanged()
   filters[6] = ui->color7Widget->getState();
   filters[7] = ui->color8Widget->getState();
 
-  display();
+  reload();
 }
 
 void ToDo::loadConfig()
