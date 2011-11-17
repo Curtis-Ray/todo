@@ -26,6 +26,11 @@ class ToDo : public QMainWindow
   private:
 
     /**
+     * Shortcut event handling.
+     */
+    bool event(QEvent *event);
+
+    /**
      * Hide to tray or save setting when closing.
      */
     void closeEvent(QCloseEvent *event);
@@ -78,7 +83,6 @@ class ToDo : public QMainWindow
     QSettings settings; /**< Application settings. */
     QMenu *contextMenu; /**< Context menu. */
     QTimer *inactivity; /**< Inactivity timer. */
-
     QVector<bool> filters; /**< Color filters. */
 
   private slots:

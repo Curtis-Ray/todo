@@ -35,8 +35,6 @@ void ColorWidget::mousePressEvent(QMouseEvent *event)
 {
   setState(!state);
 
-  emit stateChanged();
-
   QWidget::mousePressEvent(event);
 }
 
@@ -49,5 +47,12 @@ void ColorWidget::setState(bool state)
 {
   this->state = state;
 
+  emit stateChanged();
+
   repaint();
+}
+
+void ColorWidget::toggleState()
+{
+  setState(!state);
 }

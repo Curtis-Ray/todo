@@ -53,6 +53,16 @@ ToDo::ToDo(QWidget *parent)
   connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
           this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
+  // Enable key sequences.
+  grabShortcut(QKeySequence("Ctrl+1"));
+  grabShortcut(QKeySequence("Ctrl+2"));
+  grabShortcut(QKeySequence("Ctrl+3"));
+  grabShortcut(QKeySequence("Ctrl+4"));
+  grabShortcut(QKeySequence("Ctrl+5"));
+  grabShortcut(QKeySequence("Ctrl+6"));
+  grabShortcut(QKeySequence("Ctrl+7"));
+  grabShortcut(QKeySequence("Ctrl+8"));
+
   // Show all informations in calendar and textedits.
   emit display();
 }
@@ -62,6 +72,56 @@ ToDo::~ToDo()
   delete ui;
   delete contextMenu;
   delete trayIcon;
+}
+
+bool ToDo::event(QEvent *event)
+{
+  if (event->type() == QEvent::Shortcut)
+  {
+    QShortcutEvent *shortcut = (QShortcutEvent *)event;
+    if (shortcut->key() == QKeySequence("Ctrl+1"))
+    {
+      ui->color1Widget->toggleState();
+      return true;
+    }
+    else if (shortcut->key() == QKeySequence("Ctrl+2"))
+    {
+      ui->color2Widget->toggleState();
+      return true;
+    }
+    else if (shortcut->key() == QKeySequence("Ctrl+3"))
+    {
+      ui->color3Widget->toggleState();
+      return true;
+    }
+    else if (shortcut->key() == QKeySequence("Ctrl+4"))
+    {
+      ui->color4Widget->toggleState();
+      return true;
+    }
+    else if (shortcut->key() == QKeySequence("Ctrl+5"))
+    {
+      ui->color5Widget->toggleState();
+      return true;
+    }
+    else if (shortcut->key() == QKeySequence("Ctrl+6"))
+    {
+      ui->color6Widget->toggleState();
+      return true;
+    }
+    else if (shortcut->key() == QKeySequence("Ctrl+7"))
+    {
+      ui->color7Widget->toggleState();
+      return true;
+    }
+    else if (shortcut->key() == QKeySequence("Ctrl+8"))
+    {
+      ui->color8Widget->toggleState();
+      return true;
+    }
+  }
+
+  return QWidget::event(event);
 }
 
 bool ToDo::dataLessThan(const struct note &d1, const struct note &d2)
@@ -518,10 +578,8 @@ void ToDo::settingsDialog()
   ui.foregroundButton->setStandardColors();
   ui.backgroundButton->setCurrentColor(settings.value("general/background").value<QColor>());
   ui.backgroundButton->setStandardColors();
-
   ui.fontComboBox->setCurrentFont(settings.value("general/font").value<QFont>());
   ui.fontSpinBox->setValue(settings.value("general/font").value<QFont>().pointSize());
-
   ui.timeComboBox->addItem("HH:MM");
   ui.dateComboBox->addItem("DD.MM.YYYY");
 

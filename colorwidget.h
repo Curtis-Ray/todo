@@ -28,6 +28,11 @@ class ColorWidget : public QWidget
      */
     void setState(bool state);
 
+    /**
+     * Toggle state.
+     */
+    void toggleState();
+
   signals:
 
     /**
