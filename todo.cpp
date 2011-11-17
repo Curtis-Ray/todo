@@ -483,6 +483,7 @@ void ToDo::settingsDialog()
   ui.backgroundButton->setCurrentColor(settings.value("general/background").value<QColor>());
   ui.backgroundButton->setStandardColors();
   ui.fontComboBox->setCurrentFont(settings.value("general/font").value<QFont>());
+  ui.fontSpinBox->setValue(settings.value("general/font").value<QFont>().pointSize());
 
   dialog->exec();
 
@@ -505,7 +506,7 @@ void ToDo::settingsDialog()
     settings.setValue("colors/8/color", ui.color8Button->currentColor());
     settings.setValue("general/foreground", ui.foregroundButton->currentColor());
     settings.setValue("general/background", ui.backgroundButton->currentColor());
-    settings.setValue("general/font", ui.fontComboBox->currentFont());
+    settings.setValue("general/font", QFont(ui.fontComboBox->currentFont().toString(), ui.fontSpinBox->value()));
 
     // Apply changes.
     loadConfig();
