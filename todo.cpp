@@ -89,9 +89,11 @@ void ToDo::parse()
   // Text coloring.
   QTextCharFormat format;
   // Date regexp.
-  QRegExp rx("^(0?[1-9]|[12][0-9]|3[01]).(0?[1-9]|1[0-2]).(\\d{4})\\s+(.*)");
+  QRegExp rx("^\\s*(0?[1-9]|[12][0-9]|3[01]).(0?[1-9]|1[0-2]).(\\d{4})\\s+(.*)");
   // Time regexp.
   QRegExp rx2("^(0?[0-9]|1[0-9]|2[0-4]):([0-5][0-9])\\s+(.*)");
+  // Color regexp.
+  QRegExp rx3("^\\*([1-8])\\*\\s+(.*)");
   // Temporary variables.
   struct note tempNote;
   QColor tempColor;
@@ -109,7 +111,7 @@ void ToDo::parse()
     { // Parsing loop.
       // Select line.
       cursor->select(QTextCursor::BlockUnderCursor);
-      row = cursor->selectedText();
+      row = cursor->selectedText().trimmed();
 
       // Which color is line.
       format = cursor->charFormat();
@@ -126,6 +128,15 @@ void ToDo::parse()
         tempNote.date = QDate();
         tempNote.time = QTime();
         tempNote.content = row.trimmed();
+        // Color token on line.
+        if(rx3.indexIn(tempNote.content) != -1)
+        {
+          if(rx.indexIn(rx3.cap(2).trimmed()) == -1)
+          { // If line started as a date.
+            tempNote.color = rx3.cap(1).toInt() - 1;
+            tempNote.content = rx3.cap(2).trimmed();
+          }
+        }
       }
       else
       { // It has date - it is diary record.
@@ -137,14 +148,27 @@ void ToDo::parse()
         { // No time.
           tempNote.time = QTime();
           tempNote.content = rx.cap(4).trimmed();
+          // Color token on line.
+          if(rx3.indexIn(tempNote.content) != -1)
+          {
+            tempNote.color = rx3.cap(1).toInt() - 1;
+            tempNote.content = rx3.cap(2).trimmed();
+          }
         }
         else
         { // It has time.
           tempNote.time = QTime(rx2.cap(1).toInt(), rx2.cap(2).toInt());
           tempNote.content = rx2.cap(3).trimmed();
+          // Color token on line.
+          if(rx3.indexIn(tempNote.content) != -1)
+          {
+            tempNote.color = rx3.cap(1).toInt() - 1;
+            tempNote.content = rx3.cap(2).trimmed();
+          }
         }
       }
 
+      if(!(tempNote.date.isNull() && tempNote.content == ""))
       // Save temp to data structure.
       data.insert(counter++, tempNote);
 
@@ -167,8 +191,8 @@ void ToDo::parse()
 void ToDo::display()
 {
   // Delete all from textEdits.
-  ui->diaryTextEdit->setPlainText("");
-  ui->notesTextEdit->setPlainText("");
+  ui->diaryTextEdit->clear();
+  ui->notesTextEdit->clear();
 
   // Create cursors - one for diary, one for notes.
   QTextCursor *cursorDiary = new QTextCursor(ui->diaryTextEdit->document());
@@ -177,6 +201,8 @@ void ToDo::display()
   QTextCharFormat format;
   // Temp variable.
   QString temp;
+  bool firstDiary = true;
+  bool firstNote = true;
 
   // Move cursors to start.
   cursorDiary->setPosition(0);
@@ -190,9 +216,14 @@ void ToDo::display()
       format.setForeground(QBrush(colors[row.color]));
       // Create row from date, time and content.
       temp = row.date.toString("dd.MM.yyyy") + " ";
-      temp += (!row.time.isNull()) ? row.time.toString("hh:mm") + " " : " ";
-      temp += row.content + "\n";
+      temp += (!row.time.isNull()) ? row.time.toString("hh:mm") + " " : "";
+      temp += row.content;
       // Insert it.
+      if(!firstDiary)
+      {// Not a first line.
+        cursorDiary->insertBlock();
+      }
+      else { firstDiary = false; }
       cursorDiary->insertText(temp, format);
     }
     else
@@ -200,8 +231,13 @@ void ToDo::display()
       // Set color of row.
       format.setForeground(QBrush(colors[row.color]));
       // Create row only from content.
-      temp = row.content + "\n";
+      temp = row.content;
       // Insert it.
+      if(!firstNote)
+      {// Not a first line.
+        cursorNotes->insertBlock();
+      }
+      else { firstNote = false; }
       cursorNotes->insertText(temp, format);
     }
   }
