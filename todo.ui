@@ -142,6 +142,9 @@
        <property name="tabChangesFocus">
         <bool>true</bool>
        </property>
+       <property name="acceptRichText">
+        <bool>false</bool>
+       </property>
       </widget>
       <widget class="QTextEdit" name="notesTextEdit">
        <property name="contextMenuPolicy">
@@ -152,6 +155,9 @@
        </property>
        <property name="tabChangesFocus">
         <bool>true</bool>
+       </property>
+       <property name="acceptRichText">
+        <bool>false</bool>
        </property>
       </widget>
      </widget>
