@@ -574,8 +574,6 @@ void ToDo::settingsDialog()
   // Save values before changes.
   saveConfig();
 
-  ////// TODO: load settings
-
   ui.trayCheckBox->setChecked(settings.value("general/tray").value<bool>());
   ui.decorationCheckBox->setChecked(settings.value("general/frameless").value<bool>());
   ui.opacitySlider->setValue(settings.value("general/opacity").value<double>() * 100);
@@ -608,8 +606,6 @@ void ToDo::settingsDialog()
 
   if (dialog->result() == QDialog::Accepted)
   { // Apply changes.
-
-    ////// TODO: apply changes from form
 
     // Save changes.
     settings.setValue("general/tray", ui.trayCheckBox->isChecked());
