@@ -23,12 +23,18 @@
     </property>
     <item row="0" column="0">
      <widget class="QSplitter" name="splitter">
+      <property name="locale">
+       <locale language="English" country="UnitedStates"/>
+      </property>
       <property name="orientation">
        <enum>Qt::Vertical</enum>
       </property>
       <widget class="QCalendarWidget" name="calendarWidget">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="locale">
+        <locale language="English" country="UnitedStates"/>
        </property>
        <property name="minimumDate">
         <date>
@@ -42,6 +48,9 @@
        </property>
       </widget>
       <widget class="QWidget" name="horizontalLayoutWidget">
+       <property name="locale">
+        <locale language="English" country="UnitedStates"/>
+       </property>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <property name="spacing">
          <number>0</number>
@@ -57,6 +66,9 @@
             <height>0</height>
            </size>
           </property>
+          <property name="locale">
+           <locale language="English" country="UnitedStates"/>
+          </property>
          </widget>
         </item>
         <item>
@@ -66,6 +78,9 @@
             <width>0</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="locale">
+           <locale language="English" country="UnitedStates"/>
           </property>
          </widget>
         </item>
@@ -77,6 +92,9 @@
             <height>0</height>
            </size>
           </property>
+          <property name="locale">
+           <locale language="English" country="UnitedStates"/>
+          </property>
          </widget>
         </item>
         <item>
@@ -86,6 +104,9 @@
             <width>0</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="locale">
+           <locale language="English" country="UnitedStates"/>
           </property>
          </widget>
         </item>
@@ -97,6 +118,9 @@
             <height>0</height>
            </size>
           </property>
+          <property name="locale">
+           <locale language="English" country="UnitedStates"/>
+          </property>
          </widget>
         </item>
         <item>
@@ -107,7 +131,9 @@
             <height>0</height>
            </size>
           </property>
-          <zorder>color2Widget</zorder>
+          <property name="locale">
+           <locale language="English" country="UnitedStates"/>
+          </property>
          </widget>
         </item>
         <item>
@@ -117,6 +143,9 @@
             <width>0</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="locale">
+           <locale language="English" country="UnitedStates"/>
           </property>
          </widget>
         </item>
@@ -128,6 +157,9 @@
             <height>0</height>
            </size>
           </property>
+          <property name="locale">
+           <locale language="English" country="UnitedStates"/>
+          </property>
          </widget>
         </item>
        </layout>
@@ -135,6 +167,9 @@
       <widget class="QTextEdit" name="diaryTextEdit">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="locale">
+        <locale language="English" country="UnitedStates"/>
        </property>
        <property name="lineWidth">
         <number>0</number>
@@ -149,6 +184,9 @@
       <widget class="QTextEdit" name="notesTextEdit">
        <property name="contextMenuPolicy">
         <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="locale">
+        <locale language="English" country="UnitedStates"/>
        </property>
        <property name="lineWidth">
         <number>0</number>

@@ -6,16 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>435</width>
-    <height>566</height>
+    <width>504</width>
+    <height>568</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="locale">
+   <locale language="English" country="UnitedStates"/>
+  </property>
   <layout class="QGridLayout" name="settingsGridLayout">
    <item row="1" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="locale">
+      <locale language="English" country="UnitedStates"/>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -26,12 +32,15 @@
    </item>
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
+     <property name="locale">
+      <locale language="English" country="UnitedStates"/>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
      <widget class="QWidget" name="general">
       <attribute name="title">
-       <string>Obecné</string>
+       <string>General</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="1" column="0">
@@ -48,14 +57,14 @@
          <item row="0" column="0">
           <widget class="QCheckBox" name="decorationCheckBox">
            <property name="text">
-            <string>Skrýt dekoraci okna</string>
+            <string>Remove window decoration</string>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
           <widget class="QCheckBox" name="trayCheckBox">
            <property name="text">
-            <string>Schovávat do oznamovací oblasti</string>
+            <string>Hide into tray</string>
            </property>
           </widget>
          </item>
@@ -85,7 +94,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="opacityLabel">
            <property name="text">
-            <string>Průhlednost:</string>
+            <string>Transparency</string>
            </property>
           </widget>
          </item>
@@ -108,7 +117,7 @@
      </widget>
      <widget class="QWidget" name="formats">
       <attribute name="title">
-       <string>Formáty</string>
+       <string>Formats</string>
       </attribute>
       <layout class="QGridLayout" name="formatsGridLayout">
        <item row="0" column="0">
@@ -116,14 +125,14 @@
          <item row="0" column="0">
           <widget class="QLabel" name="dateLabel">
            <property name="text">
-            <string>Formát data:</string>
+            <string>Date format:</string>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="timeLabel">
            <property name="text">
-            <string>Formát času:</string>
+            <string>Time format:</string>
            </property>
           </widget>
          </item>
@@ -139,13 +148,16 @@
      </widget>
      <widget class="QWidget" name="colors">
       <attribute name="title">
-       <string>Barvy a písmo</string>
+       <string>Font and colors</string>
       </attribute>
       <layout class="QGridLayout" name="colorsGridLayout">
        <item row="0" column="0">
         <widget class="QGroupBox" name="filtersGroupBox">
+         <property name="locale">
+          <locale language="English" country="UnitedStates"/>
+         </property>
          <property name="title">
-          <string>Filtry</string>
+          <string>Filters</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
           <item row="0" column="0">
@@ -155,62 +167,89 @@
             </property>
             <item row="1" column="0">
              <widget class="QLabel" name="color2Label">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
-               <string>Barva 2:</string>
+               <string>Color 2:</string>
               </property>
              </widget>
             </item>
             <item row="2" column="0">
              <widget class="QLabel" name="color3Label">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
-               <string>Barva 3:</string>
+               <string>Color 3:</string>
               </property>
              </widget>
             </item>
             <item row="3" column="0">
              <widget class="QLabel" name="color4Label">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
-               <string>Barva 4:</string>
+               <string>Color 4:</string>
               </property>
              </widget>
             </item>
             <item row="4" column="0">
              <widget class="QLabel" name="color5Label">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
-               <string>Barva 5:</string>
+               <string>Color 5:</string>
               </property>
              </widget>
             </item>
             <item row="5" column="0">
              <widget class="QLabel" name="color6Label">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
-               <string>Barva 6:</string>
+               <string>Color 6:</string>
               </property>
              </widget>
             </item>
             <item row="6" column="0">
              <widget class="QLabel" name="color7Label">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
-               <string>Barva 7:</string>
+               <string>Color 7:</string>
               </property>
              </widget>
             </item>
             <item row="7" column="0">
              <widget class="QLabel" name="color8Label">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
-               <string>Barva 8:</string>
+               <string>Color 8:</string>
               </property>
              </widget>
             </item>
             <item row="0" column="0">
              <widget class="QLabel" name="color1Label">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
-               <string>Barva 1:</string>
+               <string>Color 1:</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
              <widget class="QtColorPicker" name="color1Button">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
                <string>PushButton</string>
               </property>
@@ -218,6 +257,9 @@
             </item>
             <item row="1" column="1">
              <widget class="QtColorPicker" name="color2Button">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
                <string>PushButton</string>
               </property>
@@ -225,6 +267,9 @@
             </item>
             <item row="2" column="1">
              <widget class="QtColorPicker" name="color3Button">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
                <string>PushButton</string>
               </property>
@@ -232,6 +277,9 @@
             </item>
             <item row="3" column="1">
              <widget class="QtColorPicker" name="color4Button">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
                <string>PushButton</string>
               </property>
@@ -239,6 +287,9 @@
             </item>
             <item row="4" column="1">
              <widget class="QtColorPicker" name="color5Button">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
                <string>PushButton</string>
               </property>
@@ -246,6 +297,9 @@
             </item>
             <item row="5" column="1">
              <widget class="QtColorPicker" name="color6Button">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
                <string>PushButton</string>
               </property>
@@ -253,6 +307,9 @@
             </item>
             <item row="6" column="1">
              <widget class="QtColorPicker" name="color7Button">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
                <string>PushButton</string>
               </property>
@@ -260,6 +317,9 @@
             </item>
             <item row="7" column="1">
              <widget class="QtColorPicker" name="color8Button">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
                <string>PushButton</string>
               </property>
@@ -272,14 +332,20 @@
        </item>
        <item row="1" column="0">
         <widget class="QGroupBox" name="fontGroupBox">
+         <property name="locale">
+          <locale language="English" country="UnitedStates"/>
+         </property>
          <property name="title">
-          <string>Písmo</string>
+          <string>Font</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
            <layout class="QFormLayout" name="formLayout">
             <item row="0" column="0">
              <widget class="QLabel" name="fontLabel">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
                <string>Font:</string>
               </property>
@@ -287,20 +353,29 @@
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="foregroundLabel">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
-               <string>Barva popředí:</string>
+               <string>Foreground:</string>
               </property>
              </widget>
             </item>
             <item row="2" column="0">
              <widget class="QLabel" name="backgroundLabel">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
-               <string>Barva pozadí:</string>
+               <string>Background:</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
              <widget class="QtColorPicker" name="foregroundButton">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
                <string>PushButton</string>
               </property>
@@ -308,6 +383,9 @@
             </item>
             <item row="2" column="1">
              <widget class="QtColorPicker" name="backgroundButton">
+              <property name="locale">
+               <locale language="English" country="UnitedStates"/>
+              </property>
               <property name="text">
                <string>PushButton</string>
               </property>
@@ -316,10 +394,17 @@
             <item row="0" column="1">
              <layout class="QHBoxLayout" name="fontHorizontalLayout">
               <item>
-               <widget class="QFontComboBox" name="fontComboBox"/>
+               <widget class="QFontComboBox" name="fontComboBox">
+                <property name="locale">
+                 <locale language="English" country="UnitedStates"/>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QSpinBox" name="fontSpinBox">
+                <property name="locale">
+                 <locale language="English" country="UnitedStates"/>
+                </property>
                 <property name="minimum">
                  <number>5</number>
                 </property>

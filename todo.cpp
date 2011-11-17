@@ -335,8 +335,8 @@ void ToDo::mainMenu(const QPoint &)
 
 void ToDo::createContextMenu()
 {
-  contextMenu->addAction(QString::fromUtf8("Nastavení"), this, SLOT(settingsDialog()));
-  contextMenu->addAction(QString::fromUtf8("Ukončit program"), qApp, SLOT(quit()));
+  contextMenu->addAction("Settings", this, SLOT(settingsDialog()));
+  contextMenu->addAction("Exit", qApp, SLOT(quit()));
 }
 
 void ToDo::iconActivated(QSystemTrayIcon::ActivationReason reason)
