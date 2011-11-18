@@ -68,7 +68,7 @@ class ToDo : public QMainWindow
     /**
      * Display our data structures in textEdits and calendar.
      */
-    void display();
+    void display(QDate selectedInCalendar = QDate());
 
     /**
      * Create context menu.
@@ -127,6 +127,11 @@ class ToDo : public QMainWindow
      * Color fitlers event.
      */
     void filtersChanged();
+
+    /**
+     * In calendar was something changed.
+     */
+    void showDiaryFromDate(int year = 0, int month = 0);
 };
 
 #endif // TODO_H

@@ -36,6 +36,14 @@ ToDo::ToDo(QWidget *parent)
   // Inactive timer expired.
   connect(inactivity, SIGNAL(timeout()), this, SLOT(reload()));
 
+  // Calendar select.
+  connect(ui->calendarWidget, SIGNAL(selectionChanged()),
+          this, SLOT(showDiaryFromDate()));
+  connect(ui->calendarWidget, SIGNAL(currentPageChanged(int,int)),
+          this, SLOT(showDiaryFromDate(int,int)));
+  connect(ui->calendarWidget, SIGNAL(clicked(QDate)),
+          this, SLOT(showDiaryFromDate()));
+
   // Filters.
   connect(ui->color1Widget, SIGNAL(stateChanged()), this, SLOT(filtersChanged()));
   connect(ui->color2Widget, SIGNAL(stateChanged()), this, SLOT(filtersChanged()));
@@ -141,13 +149,15 @@ void ToDo::parse()
   QString row("");
   // Create cursor for diary textEdit.
   QTextCursor *cursor = new QTextCursor(ui->diaryTextEdit->document());
+  // Actual parsed textEdit.
+  QTextEdit *currentTextEdit = ui->diaryTextEdit;
   // Real cursor position.
   QTextCursor realCursorPos = ui->diaryTextEdit->textCursor();
   realCursorPos.movePosition(QTextCursor::StartOfBlock);
   // Text coloring.
   QTextCharFormat format;
   // Date regexp.
-  QRegExp rx("^\\s*(0?[1-9]|[12][0-9]|3[01]).(0?[1-9]|1[0-2]).(\\d{4})\\s+(.*)");
+  QRegExp rx("^\\s*(0?[1-9]|[12][0-9]|3[01])\\.(0?[1-9]|1[0-2])\\.(\\d{4})?\\s+(.*)");
   // Time regexp.
   QRegExp rx2("^(0?[0-9]|1[0-9]|2[0-4]):([0-5][0-9])\\s+(.*)");
   // Color regexp.
@@ -167,7 +177,7 @@ void ToDo::parse()
 
     while(!cursor->atEnd())
     { // Parsing loop.
-      if(cursor->position() == realCursorPos.position())
+      if(cursor->position() == realCursorPos.position() && currentTextEdit->hasFocus())
         tempNote.hasCursor = true;
       else
         tempNote.hasCursor = false;
@@ -186,7 +196,7 @@ void ToDo::parse()
           break;
         }
         else
-        {
+        { // Not right color - set to default (first color).
           tempNote.color = 0;
         }
       }
@@ -209,9 +219,15 @@ void ToDo::parse()
       }
       else
       { // It has date - it is diary record.
-        tempNote.date = QDate(rx.cap(3).toInt(),
-                              rx.cap(2).toInt(),
-                              rx.cap(1).toInt());
+        if(rx.cap(3) == "")
+        { // Empty year - set tu current
+          tempNote.date = QDate(QDate::currentDate().year(), rx.cap(2).toInt(), rx.cap(1).toInt());
+        }
+        else
+        { // Year is regulary set by user.
+          tempNote.date = QDate(rx.cap(3).toInt(), rx.cap(2).toInt(), rx.cap(1).toInt());
+        }
+
         // Time on line.
         if(rx2.indexIn(rx.cap(4)) == -1)
         { // No time.
@@ -248,6 +264,7 @@ void ToDo::parse()
 
     // Move cursor to second textEdit.
     *cursor = QTextCursor(ui->notesTextEdit->document());
+    currentTextEdit = ui->notesTextEdit;
     realCursorPos = ui->notesTextEdit->textCursor();
     realCursorPos.movePosition(QTextCursor::StartOfBlock);
   }
@@ -256,8 +273,12 @@ void ToDo::parse()
   cursor = NULL;
 }
 
-void ToDo::display()
+void ToDo::display(QDate selectedInCalendar)
 {
+  // Is it selected date from top calendar.
+  bool isSelectedInCalendar = !selectedInCalendar.isNull();
+  bool isSelectedDateFind = false;
+
   // Delete all from textEdits.
   ui->diaryTextEdit->clear();
   ui->notesTextEdit->clear();
@@ -272,7 +293,10 @@ void ToDo::display()
   QTextCursor *cursorDiary = new QTextCursor(ui->diaryTextEdit->document());
   QTextCursor *cursorNotes = new QTextCursor(ui->notesTextEdit->document());
   // Visible cursor.
-  QTextCursor realCursorPos = ui->diaryTextEdit->textCursor();
+  QTextEdit *textEditWithCursor = ui->diaryTextEdit;
+  QTextCursor realCursor;
+  // Ugly magic constant :-)
+  int realCursorPos = 0;
   // Text coloring.
   QTextCharFormat format;
   // Calendar bolding.
@@ -315,9 +339,14 @@ void ToDo::display()
         // Set color of row.
         format.setForeground(QBrush(colors[tempRow.color]));
         // Create row from date, time and content.
-        temp = tempRow.date.toString("dd.MM.yyyy") + " ";
+        if(tempRow.date.year() == QDate::currentDate().year())
+          // Has year same as current year - hide year, show only day & month.
+          temp = tempRow.date.toString("dd.MM.") + " ";
+        else
+          // Has year same as current year - hide year, show only day & month.
+          temp = tempRow.date.toString("dd.MM.yyyy") + " ";
         temp += (!tempRow.time.isNull()) ? tempRow.time.toString("hh:mm") + " " : "";
-        temp += tempRow.content + ((tempRow.hasCursor) ? "Y" : "N");
+        temp += tempRow.content;
         // Insert it.
         if(!firstDiary)
         {// Not a first line.
@@ -326,10 +355,16 @@ void ToDo::display()
         else { firstDiary = false; }
         cursorDiary->insertText(temp, format);
 
-        if(tempRow.hasCursor)
-        { // Cursor will be there.
-          cursorDiary->movePosition(QTextCursor::EndOfBlock);
-          realCursorPos = *cursorDiary;
+        if(tempRow.hasCursor && !isSelectedInCalendar)
+        { // Cursor will be there, because this is place of last writting.
+          textEditWithCursor = ui->diaryTextEdit;
+          realCursorPos = cursorDiary->position();
+        }
+        else if(isSelectedInCalendar && !isSelectedDateFind && tempRow.date >= selectedInCalendar)
+        { // Cursor will be there, because this is selected in top Calendar
+          textEditWithCursor = ui->diaryTextEdit;
+          realCursorPos = cursorDiary->position();
+          isSelectedDateFind = true;
         }
       }
       else
@@ -337,7 +372,7 @@ void ToDo::display()
         // Set color of row.
         format.setForeground(QBrush(colors[tempRow.color]));
         // Create row only from content.
-        temp = tempRow.content + ((tempRow.hasCursor) ? "Y" : "N");
+        temp = tempRow.content;
         // Insert it.
         if(!firstNote)
         {// Not a first line.
@@ -346,10 +381,10 @@ void ToDo::display()
         else { firstNote = false; }
         cursorNotes->insertText(temp, format);
 
-        if(tempRow.hasCursor)
+        if(tempRow.hasCursor && !isSelectedInCalendar)
         { // Cursor will be there.
-          cursorNotes->movePosition(QTextCursor::EndOfBlock);
-          realCursorPos = *cursorNotes;
+          textEditWithCursor = ui->notesTextEdit;
+          realCursorPos = cursorNotes->position();
         }
       }
     }
@@ -359,11 +394,16 @@ void ToDo::display()
     }
   }
 
-  //ui->notesTextEdit->setTextCursor(realCursorPos);
+  // Show cursor at last edited row.
+  realCursor = textEditWithCursor->textCursor();
+  realCursor.setPosition(realCursorPos);
+  textEditWithCursor->setTextCursor(realCursor);
+  textEditWithCursor->setFocus();
 }
 
 void ToDo::userActive()
 {
+  // Get sender.
   QTextEdit *textEdit = qobject_cast<QTextEdit*>(sender());
 
   // Get actuall cursor position.
@@ -476,6 +516,14 @@ void ToDo::filtersChanged()
   filters[7] = ui->color8Widget->getState();
 
   reload();
+}
+
+void ToDo::showDiaryFromDate(int year, int month)
+{
+  if(year == 0 && month == 0)
+    display(ui->calendarWidget->selectedDate());
+  else
+    display(QDate(year, month, 1));
 }
 
 void ToDo::loadConfig()
