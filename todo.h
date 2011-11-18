@@ -52,6 +52,7 @@ class ToDo : public QMainWindow
       QTime time;
       int color;
       QString content;
+      bool hasCursor;
     };
 
     /**

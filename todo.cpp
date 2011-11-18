@@ -141,6 +141,9 @@ void ToDo::parse()
   QString row("");
   // Create cursor for diary textEdit.
   QTextCursor *cursor = new QTextCursor(ui->diaryTextEdit->document());
+  // Real cursor position.
+  QTextCursor realCursorPos = ui->diaryTextEdit->textCursor();
+  realCursorPos.movePosition(QTextCursor::StartOfBlock);
   // Text coloring.
   QTextCharFormat format;
   // Date regexp.
@@ -164,6 +167,10 @@ void ToDo::parse()
 
     while(!cursor->atEnd())
     { // Parsing loop.
+      if(cursor->position() == realCursorPos.position())
+        tempNote.hasCursor = true;
+      else
+        tempNote.hasCursor = false;
       // Select line.
       cursor->select(QTextCursor::BlockUnderCursor);
       row = cursor->selectedText().trimmed();
@@ -174,7 +181,14 @@ void ToDo::parse()
       for(int j = 0; j < colors.size(); j++)
       { // Which color is it?
         if(tempColor == colors[j])
+        { // This is the right color.
           tempNote.color = j;
+          break;
+        }
+        else
+        {
+          tempNote.color = 0;
+        }
       }
 
       // Date and time on line.
@@ -234,6 +248,8 @@ void ToDo::parse()
 
     // Move cursor to second textEdit.
     *cursor = QTextCursor(ui->notesTextEdit->document());
+    realCursorPos = ui->notesTextEdit->textCursor();
+    realCursorPos.movePosition(QTextCursor::StartOfBlock);
   }
 
   delete cursor;
@@ -246,9 +262,17 @@ void ToDo::display()
   ui->diaryTextEdit->clear();
   ui->notesTextEdit->clear();
 
+  // New lines will be colored by first color.
+  QPalette palette(ui->diaryTextEdit->palette());
+  palette.setColor(QPalette::Text, colors[0]);
+  ui->diaryTextEdit->setPalette(palette);
+  ui->notesTextEdit->setPalette(palette);
+
   // Create cursors - one for diary, one for notes.
   QTextCursor *cursorDiary = new QTextCursor(ui->diaryTextEdit->document());
   QTextCursor *cursorNotes = new QTextCursor(ui->notesTextEdit->document());
+  // Visible cursor.
+  QTextCursor realCursorPos = ui->diaryTextEdit->textCursor();
   // Text coloring.
   QTextCharFormat format;
   // Calendar bolding.
@@ -293,7 +317,7 @@ void ToDo::display()
         // Create row from date, time and content.
         temp = tempRow.date.toString("dd.MM.yyyy") + " ";
         temp += (!tempRow.time.isNull()) ? tempRow.time.toString("hh:mm") + " " : "";
-        temp += tempRow.content;
+        temp += tempRow.content + ((tempRow.hasCursor) ? "Y" : "N");
         // Insert it.
         if(!firstDiary)
         {// Not a first line.
@@ -301,13 +325,19 @@ void ToDo::display()
         }
         else { firstDiary = false; }
         cursorDiary->insertText(temp, format);
+
+        if(tempRow.hasCursor)
+        { // Cursor will be there.
+          cursorDiary->movePosition(QTextCursor::EndOfBlock);
+          realCursorPos = *cursorDiary;
+        }
       }
       else
       { // It's note.
         // Set color of row.
         format.setForeground(QBrush(colors[tempRow.color]));
         // Create row only from content.
-        temp = tempRow.content;
+        temp = tempRow.content + ((tempRow.hasCursor) ? "Y" : "N");
         // Insert it.
         if(!firstNote)
         {// Not a first line.
@@ -315,6 +345,12 @@ void ToDo::display()
         }
         else { firstNote = false; }
         cursorNotes->insertText(temp, format);
+
+        if(tempRow.hasCursor)
+        { // Cursor will be there.
+          cursorNotes->movePosition(QTextCursor::EndOfBlock);
+          realCursorPos = *cursorNotes;
+        }
       }
     }
     else
@@ -322,10 +358,28 @@ void ToDo::display()
       unfiltered.append(tempRow);
     }
   }
+
+  //ui->notesTextEdit->setTextCursor(realCursorPos);
 }
 
 void ToDo::userActive()
 {
+  QTextEdit *textEdit = qobject_cast<QTextEdit*>(sender());
+
+  // Get actuall cursor position.
+  QTextCursor cursor = textEdit->textCursor();
+  // Text coloring.
+  QTextCharFormat format;
+
+  // Set first color from palett.
+  format.setForeground(QBrush(colors[0]));
+
+  cursor.select(QTextCursor::BlockUnderCursor);
+  if((cursor.positionInBlock() == 0 || cursor.position() <= 1) && cursor.selectedText() == "")
+  {// Cursor is in new line.
+    textEdit->setCurrentCharFormat(format);
+  }
+
   // Wait 5s for another key press.
   inactivity->start(5000);
 }
@@ -508,6 +562,7 @@ void ToDo::loadConfig()
     temp.time = settings.value("time").value<QTime>();
     temp.color = settings.value("color").value<int>();
     temp.content = settings.value("content").value<QString>();
+    temp.hasCursor = false;
     data.insert(i, temp);
   }
   settings.endArray();
@@ -626,7 +681,7 @@ void ToDo::settingsDialog()
     // Apply changes.
     loadConfig();
 
-    emit reload();
+    display();
   }
 
   delete dialog;
