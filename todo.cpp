@@ -32,6 +32,8 @@ ToDo::ToDo(QWidget *parent)
   // Text edits refreshing inactive timer.
   connect(ui->diaryTextEdit, SIGNAL(textChanged()), this, SLOT(userActive()));
   connect(ui->notesTextEdit, SIGNAL(textChanged()), this, SLOT(userActive()));
+  connect(ui->diaryTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(userActive()));
+  connect(ui->notesTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(userActive()));
 
   // Inactive timer expired.
   connect(inactivity, SIGNAL(timeout()), this, SLOT(reload()));
