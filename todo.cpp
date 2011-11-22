@@ -641,8 +641,8 @@ void ToDo::saveConfig()
   settings.setValue("splitter", ui->splitter->saveState());
   settings.setValue("frameless", 0 != (windowFlags() & Qt::FramelessWindowHint));
   settings.setValue("opacity", windowOpacity());
-  settings.setValue("foreground", ui->calendarWidget->palette().color(QPalette::Text));
-  settings.setValue("background", ui->notesTextEdit->palette().color(QPalette::Window));
+  settings.setValue("foreground", ui->calendarWidget->palette().color(QPalette::Highlight));
+  settings.setValue("background", ui->calendarWidget->palette().color(QPalette::Base));
   settings.setValue("font", font());
   settings.endGroup();
 
