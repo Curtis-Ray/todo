@@ -311,8 +311,8 @@ void ToDo::display(QDate selectedInCalendar)
 
   // Clear top calendar and highlight today.
   ui->calendarWidget->setDateTextFormat(QDate(), format2);
-  format2.setBackground(QBrush(QColor(Qt::black)));
-  format2.setForeground(QBrush(QColor(Qt::white)));
+  //format2.setBackground(QBrush(QColor(Qt::darkMagenta)));
+  format2.setForeground(QBrush(QColor(Qt::darkGreen)));
   ui->calendarWidget->setDateTextFormat(QDate(QDate::currentDate()), format2);
 
   // Move cursors to start.
@@ -335,8 +335,12 @@ void ToDo::display(QDate selectedInCalendar)
       if(!tempRow.date.isNull())
       { // It's diary.
         // Bold date in top calendar.
-        format2.setBackground(QBrush(QColor(Qt::red)));
-        format2.setForeground(QBrush(QColor(Qt::white)));
+        format2.setBackground(QBrush(colors[tempRow.color]));
+        QColor inverted(255 - colors[tempRow.color].red(),
+                        255 - colors[tempRow.color].green(),
+                        255 - colors[tempRow.color].blue());
+        format2.setForeground(QBrush(inverted));
+
         ui->calendarWidget->setDateTextFormat(tempRow.date, format2);
         // Set color of row.
         format.setForeground(QBrush(colors[tempRow.color]));
@@ -368,6 +372,11 @@ void ToDo::display(QDate selectedInCalendar)
           realCursorPos = cursorDiary->position();
           isSelectedDateFind = true;
         }
+        else if(isSelectedInCalendar && !isSelectedDateFind)
+        { // Move cursor near to the selected date.
+          textEditWithCursor = ui->diaryTextEdit;
+          realCursorPos = cursorDiary->position();
+        }
       }
       else
       { // It's note.
@@ -394,6 +403,12 @@ void ToDo::display(QDate selectedInCalendar)
     { // Backup unfiltered data for later display and parse.
       unfiltered.append(tempRow);
     }
+  }
+
+  if(isSelectedInCalendar)
+  { // Scroll whole textEdit down.
+    QScrollBar *vScrollBar = textEditWithCursor->verticalScrollBar();
+    vScrollBar->triggerAction(QScrollBar::SliderToMaximum);
   }
 
   // Show cursor at last edited row.
