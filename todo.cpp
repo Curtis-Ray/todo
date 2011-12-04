@@ -554,10 +554,10 @@ void ToDo::loadConfig()
   {
     trayIcon->hide();
   }
-  resize(settings.value("general/size").value<QSize>());
-  move(settings.value("general/position").value<QPoint>());
-  ui->splitter->restoreState(settings.value("general/splitter").value<QByteArray>());
-  if (settings.value("general/frameless").value<bool>())
+  resize(settings.value("general/size", QSize(300, 600)).value<QSize>());
+  move(settings.value("general/position", QPoint(0, 0)).value<QPoint>());
+  ui->splitter->restoreState(settings.value("general/splitter", QByteArray()).value<QByteArray>());
+  if (settings.value("general/frameless", false).value<bool>())
   {
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
     this->show();
@@ -567,30 +567,32 @@ void ToDo::loadConfig()
     setWindowFlags(windowFlags() & ~Qt::FramelessWindowHint);
     this->show();
   }
-  setWindowOpacity(settings.value("general/opacity").value<double>());
+  setWindowOpacity(settings.value("general/opacity", 1.0).value<double>());
+  QColor foreground = settings.value("general/foreground", ui->calendarWidget->palette().color(QPalette::Text)).value<QColor>();
+  QColor background = settings.value("general/background", ui->calendarWidget->palette().color(QPalette::Base)).value<QColor>();
 
   // Set textarea format.
   QPalette pal = palette();
-  pal.setColor(QPalette::Window, settings.value("general/background").value<QColor>());
-  pal.setColor(QPalette::Base, settings.value("general/background").value<QColor>());
-  pal.setColor(QPalette::Text, settings.value("general/foreground").value<QColor>());
+  pal.setColor(QPalette::Window, background);
+  pal.setColor(QPalette::Base, background);
+  pal.setColor(QPalette::Text, foreground);
   ui->notesTextEdit->setPalette(pal);
   ui->diaryTextEdit->setPalette(pal);
 
   // Set calendar format.
   pal = palette();
-  pal.setColor(QPalette::Base, settings.value("general/background").value<QColor>());
-  pal.setColor(QPalette::HighlightedText, settings.value("general/background").value<QColor>());
-  pal.setColor(QPalette::Highlight, settings.value("general/foreground").value<QColor>());
+  pal.setColor(QPalette::Base, background);
+  pal.setColor(QPalette::HighlightedText, background);
+  pal.setColor(QPalette::Highlight, foreground);
   ui->calendarWidget->setPalette(pal);
   QTextCharFormat format;
-  format.setForeground(settings.value("general/foreground").value<QColor>());
+  format.setForeground(foreground);
   ui->calendarWidget->setWeekdayTextFormat(Qt::Monday, format);
   ui->calendarWidget->setWeekdayTextFormat(Qt::Tuesday, format);
   ui->calendarWidget->setWeekdayTextFormat(Qt::Wednesday, format);
   ui->calendarWidget->setWeekdayTextFormat(Qt::Thursday, format);
   ui->calendarWidget->setWeekdayTextFormat(Qt::Friday, format);
-  setFont(settings.value("general/font").value<QFont>());
+  setFont(settings.value("general/font", font()).value<QFont>());
 
   // Load format date and time.
   dateFormat = settings.value("format/date").value<QString>();
@@ -617,10 +619,38 @@ void ToDo::loadConfig()
   settings.beginReadArray("colors");
   size = 8; // Ugly magic constant.
   colors.clear();
+  QColor color;
   for (int i = 0; i < size; ++i)
   { // Load colors vector.
     settings.setArrayIndex(i);
-    colors.insert(i, settings.value("color", QColor(Qt::black)).value<QColor>());
+    switch (i)
+    { // Defaults colors.
+      case 0:
+        color = Qt::black;
+        break;
+      case 1:
+        color = Qt::red;
+        break;
+      case 2:
+        color = Qt::green;
+        break;
+      case 3:
+        color = Qt::blue;
+        break;
+      case 4:
+        color = Qt::gray;
+        break;
+      case 5:
+        color = Qt::magenta;
+        break;
+      case 6:
+        color = Qt::yellow;
+        break;
+      case 7:
+        color = Qt::cyan;
+        break;
+    }
+    colors.insert(i, settings.value("color", color).value<QColor>());
   }
   ui->color1Widget->setColor(colors[0]);
   ui->color2Widget->setColor(colors[1]);
